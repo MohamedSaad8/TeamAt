@@ -11,7 +11,7 @@ class TeamAtSplashScreen extends StatelessWidget {
     return SplashScreenView(
       home: nextScreen,
       duration: 5000,
-      imageSize: (size.height * 0.4).toInt(),
+      imageSize: (size.height * 0.3).toInt(),
       imageSrc: "assets/images/logo.png",
       backgroundColor: kMainColor ,
 

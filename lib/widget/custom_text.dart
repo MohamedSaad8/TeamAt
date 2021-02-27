@@ -33,7 +33,7 @@ class CustomText extends StatelessWidget {
             color: fontColor,
             fontWeight: fontWeight,
             fontSize: fontSize,
-            fontFamily: "Poppins"
+            fontFamily: (controller.currentAppLanguage== "ar")  ? "Cairo" :"Poppins"
           ),
         ),
       ),

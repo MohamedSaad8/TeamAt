@@ -17,6 +17,8 @@ class CustomTextFormField extends StatelessWidget {
   final double borderWidth;
   final double borderRadius;
   final bool withSuffixIcon;
+  final double fieldWidth ;
+  final double fieldHeight ;
 
   CustomTextFormField(
       {this.withSuffixIcon = false,
@@ -33,46 +35,54 @@ class CustomTextFormField extends StatelessWidget {
       this.borderColor = Colors.black,
       this.cursorColor = Colors.black,
       this.borderWidth = 2.0,
-      this.borderRadius = 20.0});
+      this.borderRadius = 20.0,
+      this.fieldWidth = 375 ,
+        this.fieldHeight = 60 ,
+      });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      validator: validator,
-      onSaved: onSave,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      cursorColor: cursorColor,
-      decoration: InputDecoration(
-        hintText: hintText,
-        suffixIcon: withSuffixIcon
-            ? Icon(
-                Icons.remove_red_eye_outlined,
-                color: Color(0xff757575),
-              )
-            : Container(
-                width: 0,
-                height: 0,
-              ),
-        prefixIcon: Icon(
-          prefixIcon,
-          color: prefixIconColor,
-        ),
-        filled: filled,
-        fillColor: fillColor,
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: borderColor,
-            width: borderWidth,
+    return Container(
+      width: fieldWidth,
+      height: fieldHeight,
+      child: TextFormField(
+        validator: validator,
+        onSaved: onSave,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        cursorColor: cursorColor,
+        decoration: InputDecoration(
+          isDense: true,
+          hintText: hintText,
+          suffixIcon: withSuffixIcon
+              ? Icon(
+                  Icons.remove_red_eye_outlined,
+                  color: Color(0xff757575),
+                )
+              : Container(
+                  width: 0,
+                  height: 0,
+                ),
+          prefixIcon: Icon(
+            prefixIcon,
+            color: prefixIconColor,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: focusedBorderColor,
-            width: borderWidth,
+          filled: filled,
+          fillColor: fillColor,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: borderColor,
+              width: borderWidth,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
           ),
-          borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: focusedBorderColor,
+              width: borderWidth,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          ),
         ),
       ),
     );

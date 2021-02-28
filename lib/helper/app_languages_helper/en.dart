@@ -26,7 +26,12 @@ const Map<String , String> en = {
  "GettingStart" : "Getting Start",
  "Set your location so you can see the neighboring groups" : "Set your location so you can see the neighboring groups",
  "Enter your location" : "Enter your location",
- "Set your location":"Set your location"
+ "Set your location":"Set your location",
+ "emailEmpty" :"Email Is Empty",
+ "passwordEmpty" : "Password Is Empty",
+ "userNameEmpty" : "Username Is Empty",
+ "lengthError" : "password must be at less 6 char",
+ "badForm" : "this email is in bad Form"
 
 
 

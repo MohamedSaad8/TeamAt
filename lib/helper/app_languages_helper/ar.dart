@@ -28,5 +28,11 @@ const Map<String , String> ar = {
   "Set your profile photo and your name" : "حدد صورتك الشخصية و اسمك",
   "Name" : "الاسم" ,
   "Set your location" : "حدد موقعك",
+  "emailEmpty" :"البريد الالكتروني فارغ",
+  "passwordEmpty" : "الرقم السري فارغ",
+  "userNameEmpty" : "اسم المستخدم فارغ",
+  "lengthError" : "يجب ان يكون الرقم السري اكثر من 6",
+  "badForm" : "هذا البريد الالكتروني غير صالح"
+
 
 };

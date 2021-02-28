@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_at/helper/constant.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final Function validator;
@@ -52,6 +53,7 @@ class CustomTextFormField extends StatelessWidget {
         keyboardType: keyboardType,
         cursorColor: cursorColor,
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(20.h),
           isDense: true,
           hintText: hintText,
           suffixIcon: withSuffixIcon
@@ -67,6 +69,7 @@ class CustomTextFormField extends StatelessWidget {
             prefixIcon,
             color: prefixIconColor,
           ),
+          errorStyle: TextStyle(fontSize: 10.sp , fontFamily: "Cairo"),
           filled: filled,
           fillColor: fillColor,
           border: OutlineInputBorder(
@@ -83,6 +86,13 @@ class CustomTextFormField extends StatelessWidget {
             ),
             borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
           ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red,
+              width: borderWidth,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          )
         ),
       ),
     );

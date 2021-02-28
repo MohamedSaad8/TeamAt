@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:team_at/view/controll_view.dart';
 import 'package:team_at/widget/CustomButton.dart';
 import 'package:team_at/widget/custom_text.dart';
 import 'package:get/get.dart';
@@ -76,7 +77,8 @@ class CurrentLocationView extends StatelessWidget {
               buttonWidth: size.width,
               text: "Continue".tr,
               onClick: (){
-
+                print("clicked");
+                    Get.to(()=>FunLifeMainScreen()) ;
               },
               buttonRadius: 9.0,
             ),

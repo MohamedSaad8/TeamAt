@@ -84,7 +84,7 @@ class OTPVerification extends StatelessWidget {
                 ),
                 pinAnimationType: PinAnimationType.fade,
                 onSubmit: (pin) async{
-                  Get.offAll(CompleteUserInfo());
+                  Get.to(() => CompleteUserInfo());
 
                 },
               ),

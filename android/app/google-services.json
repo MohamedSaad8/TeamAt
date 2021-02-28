@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "176912872056",
+    "project_id": "teamat-47704",
+    "storage_bucket": "teamat-47704.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176912872056:android:878d8947a8a415d890f38d",
+        "android_client_info": {
+          "package_name": "com.example.team_at"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176912872056-t5rf1glsr17rkaapm78nibgqlusraekm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.team_at",
+            "certificate_hash": "715cfd5823fe511053b97da011f3e3835d3b330c"
+          }
+        },
+        {
+          "client_id": "176912872056-re6pa7pcmcshrruqeou49p4esfas4a1t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSWloVeHlpjH-U3arXN28lwHfr6w7mIsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176912872056-re6pa7pcmcshrruqeou49p4esfas4a1t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

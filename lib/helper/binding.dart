@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:team_at/viewModel/app_langauge_viewModel.dart';
 import 'local_storage_helper/language_local_storage.dart';
+import 'package:team_at/viewModel/auth_viewModel.dart';
 
 class Binding extends Bindings
 {
@@ -8,6 +9,7 @@ class Binding extends Bindings
   void dependencies() {
     Get.lazyPut(() => LanguageLocalStorage());
     Get.lazyPut(() => AppLanguageViewModel());
+    Get.lazyPut(() => AuthViewModel());
   }
 
 }

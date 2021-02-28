@@ -22,8 +22,19 @@ dependencies:
   pinput: ^1.0.0
   get_storage: ^1.4.0
   flutter_screenutil: ^4.0.3+2
+  cloud_firestore: "^0.14.4"
+  firebase_auth: "^0.18.4+1"
+  firebase_core: "0.5.3"
+  persistent_bottom_nav_bar: any
+
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logoIcon.jpg"
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.8.1"
   flutter_test:
     sdk: flutter
 

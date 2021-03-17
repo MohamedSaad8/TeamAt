@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:team_at/helper/constant.dart';
 import 'package:team_at/model/group_model.dart';
+import 'package:team_at/model/message_model.dart';
 import 'package:team_at/model/user_model.dart';
 import 'package:team_at/servcies/firestore_groups.dart';
 import 'package:team_at/servcies/getImage.dart';
@@ -79,6 +80,18 @@ class GroupViewModel extends GetxController {
   Future<void> addGroupToFireStore(GroupModel groupModel) async {
     await FireStoreGroups().groupCollectionRef.doc(groupModel.groupID).set(groupModel.toJson());
     await getGroups();
+  }
+
+  addMessageInGroupMessages(GroupModel group , MessageModel message) async{
+    await FireStoreGroups().groupCollectionRef.doc(group.groupID)
+        .collection("messages").doc(message.messageId.toString()).set(message.toJson());
+    print("Message Send done Congratulations");
+  }
+
+ Stream<QuerySnapshot> getMessageFromGroupMessages(GroupModel group){
+   return FireStoreGroups().groupCollectionRef.doc(group.groupID)
+        .collection("messages").orderBy("messageId" , descending: false).snapshots();
+
   }
 
   showDialogForChoseImages(context) {
@@ -262,7 +275,7 @@ class GroupViewModel extends GetxController {
     update();
   }
 
-UserModel getUser (String userId) {
+  UserModel getUser (String userId) {
     UserModel userData ;
     for(var user in allUsers){
       if(user.userID == userId)

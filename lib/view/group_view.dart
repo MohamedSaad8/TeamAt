@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:team_at/helper/constant.dart';
 import 'package:team_at/model/comment_model.dart';
 import 'package:team_at/model/group_model.dart';
+import 'package:team_at/model/message_model.dart';
 import 'package:team_at/model/user_model.dart';
+import 'package:team_at/view/message_view.dart';
 import 'package:team_at/viewModel/group_view_model.dart';
 import 'package:team_at/widget/CustomButton.dart';
 import 'package:team_at/widget/custom_text.dart';
@@ -233,7 +235,7 @@ class GroupView extends StatelessWidget {
                                   SizedBox(
                                     height: 8.h,
                                   ),
-                                  postLiksAndCommentsInfo(
+                                  postLikesAndCommentsInfo(
                                       postController, index - 1),
                                   SizedBox(
                                     height: 8.h,
@@ -406,7 +408,7 @@ class GroupView extends StatelessWidget {
     );
   }
 
-  Padding postLiksAndCommentsInfo(PostsViewModel postController, int index) {
+  Padding postLikesAndCommentsInfo(PostsViewModel postController, int index) {
     return Padding(
       padding: const EdgeInsets.only(left: 10),
       child: Row(
@@ -663,29 +665,34 @@ class GroupView extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: 106.w,
-            height: 40.h,
-            decoration: BoxDecoration(
-              color: Color(0xffE6E6E6),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/images/mess.png",
-                  width: 20.w,
-                ),
-                SizedBox(
-                  width: 5.w,
-                ),
-                CustomText(
-                  text: "Message",
-                  fontSize: 12.sp,
-                  fontColor: Colors.grey.shade500,
-                ),
-              ],
+          InkWell(
+            onTap: () {
+             Get.to(() => MessageView(group: group,));
+            },
+            child: Container(
+              width: 106.w,
+              height: 40.h,
+              decoration: BoxDecoration(
+                color: Color(0xffE6E6E6),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/mess.png",
+                    width: 20.w,
+                  ),
+                  SizedBox(
+                    width: 5.w,
+                  ),
+                  CustomText(
+                    text: "Message",
+                    fontSize: 12.sp,
+                    fontColor: Colors.grey.shade500,
+                  ),
+                ],
+              ),
             ),
           ),
           InkWell(

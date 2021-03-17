@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:team_at/helper/constant.dart';
 import 'file:///D:/Projects/Flutter/team_at/lib/view/AuthonticationScreens/RegistrationScreens/register_view.dart';
 import 'package:team_at/widget/CustomButton.dart';
@@ -21,43 +22,46 @@ class LoginView extends StatelessWidget {
       body: GetBuilder<AuthViewModel>(
         init: AuthViewModel(),
         builder: (controller) =>
-            SingleChildScrollView(
-              child: Form(
-                key: _key,
-                child: Column(
-                  children: [
-                    SizedBox(height: 124.h,),
-                    _headTitle(size),
-                    SizedBox(height: 24.h,),
-                    _emailField(size, controller),
-                    passwordField(size, controller),
-                    CustomText(
-                      text: "Forget password ?".tr,
-                      fontColor: Colors.red,
-                      fontSize: 12,
+            ModalProgressHUD(
+              inAsyncCall: controller.isLoading,
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _key,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 124.h,),
+                      _headTitle(size),
+                      SizedBox(height: 24.h,),
+                      _emailField(size, controller),
+                      passwordField(size, controller),
+                      CustomText(
+                        text: "Forget password ?".tr,
+                        fontColor: Colors.red,
+                        fontSize: 12,
 
-                    ),
-                    SizedBox(
-                      height: 68.h,
-                    ),
-                    signInButton(controller),
-                    SizedBox(
-                      height: 24.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomText(
-                          text: "Don't have an account?".tr,
-                          fontColor: Color(0xff757575),
-                          fontSize: 12,
+                      ),
+                      SizedBox(
+                        height: 68.h,
+                      ),
+                      signInButton(controller),
+                      SizedBox(
+                        height: 24.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            text: "Don't have an account?".tr,
+                            fontColor: Color(0xff757575),
+                            fontSize: 12,
 
-                        ),
-                        showSignUpView(),
-                      ],
-                    ),
-                    SizedBox(height: 20.h,)
-                  ],
+                          ),
+                          showSignUpView(),
+                        ],
+                      ),
+                      SizedBox(height: 20.h,)
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -68,7 +72,7 @@ class LoginView extends StatelessWidget {
   InkWell showSignUpView() {
     return InkWell(
       onTap: () {
-        Get.to(RegisterView());
+        Get.to(() => RegisterView());
       },
       child: CustomText(
         text: "Sign Up".tr,
@@ -79,7 +83,7 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Padding signInButton(controller) {
+  Padding signInButton(AuthViewModel controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: CustomButton(
@@ -89,7 +93,10 @@ class LoginView extends StatelessWidget {
         onClick: () async {
           _key.currentState.validate();
           _key.currentState.save();
+          controller.changeIsLoading(true);
           await controller.signInWithEmailAndPassword();
+          controller.changeIsLoading(false);
+
         },
         buttonRadius: 9.0,
       ),

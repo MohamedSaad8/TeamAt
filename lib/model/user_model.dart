@@ -6,9 +6,11 @@ class UserModel {
   String picURL;
   String userID;
   String name;
-  String longitude;
-  String latitude;
+  double longitude;
+  double latitude;
   String phone;
+  String country ;
+  static UserModel currentUser ;
 
   UserModel(
       {this.email,
@@ -18,7 +20,8 @@ class UserModel {
       this.name,
       this.longitude,
       this.latitude,
-      this.phone});
+      this.phone  ,
+      this.country});
 
   UserModel.fromJson(Map<dynamic, dynamic> map) {
     if (map == null) {
@@ -43,8 +46,8 @@ class UserModel {
       kPhone : phone,
       kLatitude : latitude ,
       kLongitude : longitude ,
-      kName : name
-
+      kName : name,
+      kCountry : country
     };
   }
 }

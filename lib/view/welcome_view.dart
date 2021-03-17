@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:team_at/view/AuthonticationScreens/login_view.dart';
+import 'package:team_at/view/controll_view.dart';
 import 'package:team_at/widget/CustomButton.dart';
 import 'package:team_at/widget/custom_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -65,7 +66,7 @@ class WelcomeView  extends StatelessWidget {
              buttonWidth: size.width,
              text: "GettingStart".tr,
              onClick: (){
-               Get.to(LoginView());
+               Get.to(ControlView());
              },
              buttonRadius: 9,
            ),

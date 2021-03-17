@@ -10,3 +10,4 @@ const kName = "name";
 const kLongitude = "longitude";
 const kLatitude = "latitude";
 const kPhone = "phone";
+const kCountry = "country" ;

@@ -31,7 +31,19 @@ const Map<String , String> en = {
  "passwordEmpty" : "Password Is Empty",
  "userNameEmpty" : "Username Is Empty",
  "lengthError" : "password must be at less 6 char",
- "badForm" : "this email is in bad Form"
+ "badForm" : "this email is in bad Form",
+ "nameEmpty"  : "Name is Empty" ,
+ "selectImage" : "Select Image" ,
+ "chooseAway" : "Choose Away To Select Image" ,
+ "FromGallery" : "From Gallery" ,
+ "fromCamera" : "From Camera",
+ "locationError" : "Location Error",
+ "selectLocation" : "Please Set your location",
+ "Home" : "Home " ,
+ "Profile" : "Profile" ,
+"Chats" : "Chats" ,
+ "Groups" : "Groups" ,
+
 
 
 

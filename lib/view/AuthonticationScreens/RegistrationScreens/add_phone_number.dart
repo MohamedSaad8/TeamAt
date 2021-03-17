@@ -63,11 +63,8 @@ class AddPhoneNumber extends StatelessWidget {
         onClick: () async {
           if(_key.currentState.validate())
             {
-
               _key.currentState.save();
-              Get.to(OTPVerification());
-              //await controller.verifyPhoneNumber();
-              print("verifcation done now");
+              Get.to(() => OTPVerification(phoneNumber: controller.phone,));
             }
 
         },
@@ -81,48 +78,48 @@ class AddPhoneNumber extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         height: 130.h,
-        child: Expanded(
-          child: TextFormField(
-            keyboardType: TextInputType.number,
-            cursorColor: kMainColor,
-            onSaved: (value)
-            {
-              controller.phone = controller.phone + value ;
+        child: TextFormField(
+          keyboardType: TextInputType.number,
+          cursorColor: kMainColor,
+          onSaved: (value)
+          {
+            controller.phone = controller.phone + value ;
+            print(controller.phone);
 
-            },
-            validator: (value)
-            {
-              if(value.isEmpty)
-                return  "phoneEmpty".tr ;
-            },
-            decoration: InputDecoration(
-              hintText: "0123456789",
-              prefixIcon: CountryCodePicker(
-                initialSelection: 'EG',
-                favorite: ["+20", "EG"],
-                showFlag: true,
-                onChanged: (code) {
-                  controller.phone = code.toString() ;
-                },
-                onInit: (code){
-                  controller.phone = code.toString() ;
-                },
+          },
+          validator: (value)
+          {
+            if(value.isEmpty)
+              return  "phoneEmpty".tr ;
+          },
+          decoration: InputDecoration(
+            hintText: "0123456789",
+            prefixIcon: CountryCodePicker(
+              initialSelection: 'EG',
+              favorite: ["+20", "EG"],
+              showFlag: true,
+              onChanged: (code) {
+                controller.phone = code.toString() ;
+              },
+              onInit: (code){
+                controller.phone = code.toString() ;
+                print(controller.phone);
+              },
 
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.black,
+                width: 2,
               ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.black,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(9)),
+              borderRadius: BorderRadius.all(Radius.circular(9)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: kSecondColor,
+                width: 2,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: kSecondColor,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(9)),
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(9)),
             ),
           ),
         ),

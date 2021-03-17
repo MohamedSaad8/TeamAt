@@ -65,7 +65,7 @@ class RegisterView extends StatelessWidget {
           if(_key.currentState.validate())
             {
               _key.currentState.save();
-              Get.to(AddPhoneNumber());
+              Get.to(() => AddPhoneNumber());
             }
         },
         buttonRadius: 9.0,

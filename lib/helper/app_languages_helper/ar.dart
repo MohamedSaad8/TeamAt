@@ -32,7 +32,18 @@ const Map<String , String> ar = {
   "passwordEmpty" : "الرقم السري فارغ",
   "userNameEmpty" : "اسم المستخدم فارغ",
   "lengthError" : "يجب ان يكون الرقم السري اكثر من 6",
-  "badForm" : "هذا البريد الالكتروني غير صالح"
+  "badForm" : "هذا البريد الالكتروني غير صالح",
+  "nameEmpty" : "حقل الاسم فارغ" ,
+  "selectImage" : "حدد صورة" ,
+  "chooseAway" : "اختر طريقه لتحميل الصورة" ,
+  "FromGallery" : "من الاستديو" ,
+  "fromCamera" : "من الكاميرا",
+  "locationError" : "خطا في الموقع",
+  "selectLocation" : "من فضلك حدد موقعك",
+  "Home" : "العامة" ,
+  "Profile" : "حسابي" ,
+  "Chats" : "المحادثات" ,
+  "Groups" : "المجموعات" ,
 
 
 };

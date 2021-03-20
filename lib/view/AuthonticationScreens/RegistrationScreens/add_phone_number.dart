@@ -62,10 +62,10 @@ class AddPhoneNumber extends StatelessWidget {
         text: "Continue".tr,
         onClick: () async {
           if(_key.currentState.validate())
-            {
-              _key.currentState.save();
-              Get.to(() => OTPVerification(phoneNumber: controller.phone,));
-            }
+          {
+            _key.currentState.save();
+            Get.to(() => OTPVerification(phoneNumber: controller.phone,));
+          }
 
         },
         buttonRadius: 9,
@@ -139,7 +139,7 @@ class AddPhoneNumber extends StatelessWidget {
         ),
         CustomText(
           text:
-              "Enter your mobile number, we will send a cade to your number".tr,
+          "Enter your mobile number, we will send a cade to your number".tr,
           fontColor: Colors.black,
           fontSize: 15.sp,
           textAlignment: Alignment.topLeft,

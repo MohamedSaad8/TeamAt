@@ -26,7 +26,7 @@ class GroupsView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomText(
-                text: "My Groups",
+                text: "My Groups".tr,
                 fontColor: Colors.black,
                 fontSize: 16.sp,
                 textAlignment: Alignment.centerLeft,
@@ -89,7 +89,7 @@ class GroupsView extends StatelessWidget {
                       ),
                     )
                   : CustomText(
-                      text: "No Groups Created",
+                      text: "No Groups Created".tr,
                       fontSize: 18.sp,
                       fontColor: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -106,7 +106,7 @@ class GroupsView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: CustomText(
-                text: "Other Groups",
+                text: "Other Groups".tr,
                 fontColor: Colors.black,
                 fontSize: 16.sp,
                 textAlignment: Alignment.centerLeft,
@@ -157,7 +157,7 @@ class GroupsView extends StatelessWidget {
                       itemCount: controller.otherGroups.length,
                     )
                   : CustomText(
-                      text: "No Joined Groups",
+                      text: "No Groups To Join".tr,
                       fontSize: 18.sp,
                       fontColor: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -179,7 +179,7 @@ class GroupsView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomText(
-                    text: "Groups",
+                    text: "Groups".tr,
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                     fontColor: Colors.black,

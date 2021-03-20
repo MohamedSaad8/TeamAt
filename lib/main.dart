@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
       designSize: Size(375, 812),
       allowFontScaling: false,
       builder: () => GetMaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Team At ',
         initialBinding: Binding(),
         locale: Locale("en"),

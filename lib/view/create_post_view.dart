@@ -54,7 +54,7 @@ class CreatePostView extends StatelessWidget {
                           },
                         ),
                         CustomText(
-                          text: "Create Post",
+                          text: "Create Post".tr,
                           fontSize: 18.sp,
                           fontColor: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -64,7 +64,7 @@ class CreatePostView extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: CustomButton(
-                        text: "Post",
+                        text: "Post".tr,
                         buttonRadius: 6,
                         buttonWidth: 105.w,
                         buttonHeight: 32.h,
@@ -126,8 +126,8 @@ class CreatePostView extends StatelessWidget {
                           ),
                           CustomText(
                             text: groupAdminId == UserModel.currentUser.userID
-                                ? "admin of group"
-                                : "member in group",
+                                ? "admin of group".tr
+                                : "member in group".tr,
                             fontSize: 14.sp,
                             fontColor: Color(0xff9A9595),
                           ),
@@ -145,7 +145,7 @@ class CreatePostView extends StatelessWidget {
                       TextFormField(
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: "What\'s in your mind ?",
+                          hintText: "What\'s in your mind ?".tr,
                           hintStyle: TextStyle(
                             color: Color(0xff9A9595),
                             fontSize: 24.sp,
@@ -208,7 +208,7 @@ class CreatePostView extends StatelessWidget {
                   color: Colors.black,
                 ),
                 CustomText(
-                  text: "Camera",
+                  text: "Camera".tr,
                   fontColor: Colors.black,
                   fontSize: 12,
                 )
@@ -238,7 +238,7 @@ class CreatePostView extends StatelessWidget {
                   color: Colors.black,
                 ),
                 CustomText(
-                  text: "Photos",
+                  text: "Photos".tr,
                   fontColor: Colors.black,
                   fontSize: 12,
                 )

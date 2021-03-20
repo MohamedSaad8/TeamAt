@@ -63,7 +63,7 @@ class CurrentLocationView extends StatelessWidget {
                         child: InkWell(
                           onTap: () async {
                             controller.changeIsLoading(true);
-                           await controller.getUserLocation();
+                            await controller.getUserLocation();
                             controller.changeIsLoading(false) ;
                           },
                           child: Icon(
@@ -80,8 +80,8 @@ class CurrentLocationView extends StatelessWidget {
                         text: controller.longitude == null
                             ? "Set your location".tr
                             : controller.longitude.toString() +
-                                "," +
-                                controller.latitude.toString(),
+                            "," +
+                            controller.latitude.toString(),
                         fontColor: Colors.grey.shade700,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.sp,
@@ -106,7 +106,7 @@ class CurrentLocationView extends StatelessWidget {
                     }
                     else
                       Get.snackbar("locationError".tr, "selectLocation".tr ,
-                      snackPosition: SnackPosition.BOTTOM,
+                        snackPosition: SnackPosition.BOTTOM,
                         duration: Duration(seconds: 3),
                       );
 

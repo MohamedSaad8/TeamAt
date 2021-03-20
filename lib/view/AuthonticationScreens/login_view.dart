@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:team_at/helper/constant.dart';
+import 'package:team_at/viewModel/posts_view_model.dart';
 import 'file:///D:/Projects/Flutter/team_at/lib/view/AuthonticationScreens/RegistrationScreens/register_view.dart';
 import 'package:team_at/widget/CustomButton.dart';
 import 'package:team_at/widget/custom_text.dart';
@@ -86,19 +88,29 @@ class LoginView extends StatelessWidget {
   Padding signInButton(AuthViewModel controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: CustomButton(
-        buttonHeight: 58.h,
-        buttonWidth: 375.w,
-        text: "Sign in".tr,
-        onClick: () async {
-          _key.currentState.validate();
-          _key.currentState.save();
-          controller.changeIsLoading(true);
-          await controller.signInWithEmailAndPassword();
-          controller.changeIsLoading(false);
+      child: GetBuilder<PostsViewModel>(
+        init: PostsViewModel(),
+        builder:(postController) => CustomButton(
+          buttonHeight: 58.h,
+          buttonWidth: 375.w,
+          text: "Sign in".tr,
+          onClick: () async {
+            _key.currentState.validate();
+            _key.currentState.save();
+            controller.changeIsLoading(true);
+            await controller.signInWithEmailAndPassword();
+            SharedPreferences preferences = await SharedPreferences.getInstance();
+            String userID = preferences.getString("userID");
+            await postController.getUserFromFireStore(userID);
+            await postController.getAllUser();
+            await postController.getAllGroups();
+            await postController.getAllPostsByUserId();
+            await postController.getAllFollowingGroupsPostsByUserId();
+            controller.changeIsLoading(false);
 
-        },
-        buttonRadius: 9.0,
+          },
+          buttonRadius: 9.0,
+        ),
       ),
     );
   }

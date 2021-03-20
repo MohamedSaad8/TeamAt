@@ -125,7 +125,7 @@ class _OTPVerificationState extends State<OTPVerification> {
 
   @override
   void initState()  {
-     phoneNumberVerification();
+    phoneNumberVerification();
     super.initState() ;
 
   }
@@ -146,9 +146,9 @@ class _OTPVerificationState extends State<OTPVerification> {
         },
         codeAutoRetrievalTimeout: (verificationID){
 
-         setState(() {
-           widget.verificationCode = verificationID ;
-         });
+          setState(() {
+            widget.verificationCode = verificationID ;
+          });
         },
         timeout: Duration(seconds: 120)
     );

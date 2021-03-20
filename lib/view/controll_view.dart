@@ -13,96 +13,189 @@ import 'package:team_at/widget/custom_text.dart';
 class ControlView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        return (Get.find<AuthViewModel>().userEmail == null)
+
+    return GetX<AuthViewModel>(
+      init: AuthViewModel(),
+      builder: (cont){
+        return (cont.userEmail == null)
             ? LoginView()
             : GetBuilder<ControlHomeViewModel>(
-                init: ControlHomeViewModel(),
-                builder: (controller) => Scaffold(
-                  body: controller.currentScreen,
-                  bottomNavigationBar: _bottomNavigationBar(),
-                  floatingActionButton: FloatingActionButton(
-                    backgroundColor: kMainColor,
-                    onPressed: () {
-                      Get.bottomSheet(
-                        GetBuilder<GroupViewModel>(
-                          init: GroupViewModel(),
-                          builder: (groupController) => Container(
-                            height: 600.h,
-                            width: 375.w,
-                            color: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  CustomText(
-                                    text: "Select Group",
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                    textAlignment: Alignment.centerLeft,
-                                  ),
-                                  Divider(color: Colors.grey,),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      itemBuilder: (context, index) {
-                                        return InkWell(
-                                          onTap: (){
-                                            Get.to(()=> CreatePostView(
-                                              groupAdminId: groupController.myGroupsList[index].admin,
-                                              groupId: groupController.myGroupsList[index].groupID ,
-                                              thisGroup: groupController.myGroupsList[index] ,
-                                            ),
-                                            );
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(bottom: 10),
-                                            child: Row(
-                                              children: [
-                                                CircleAvatar(
-                                                  radius: 16.w,
-                                                  backgroundImage: NetworkImage(
-                                                      groupController
-                                                          .myGroupsList[index]
-                                                          .groupPictureURL),
-                                                ),
-                                                SizedBox(
-                                                  width: 8.w,
-                                                ),
-                                                CustomText(
-                                                  text: groupController
-                                                      .myGroupsList[index].groupName,
-                                                  fontSize: 16.sp,
-                                                ),
-                                              ],
-                                            ),
+          init: ControlHomeViewModel(),
+          builder: (controller) => Scaffold(
+            body: controller.currentScreen,
+            bottomNavigationBar: _bottomNavigationBar(),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: kMainColor,
+              onPressed: () {
+                Get.bottomSheet(
+                  GetBuilder<GroupViewModel>(
+                    init: GroupViewModel(),
+                    builder: (groupController) => Container(
+                      height: 600.h,
+                      width: 375.w,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            CustomText(
+                              text: "Select Group".tr,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                              textAlignment: Alignment.centerLeft,
+                            ),
+                            Divider(color: Colors.grey,),
+                            Expanded(
+                              child: ListView.builder(
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: (){
+                                      Get.to(()=> CreatePostView(
+                                        groupAdminId: groupController.myGroupsList[index].admin,
+                                        groupId: groupController.myGroupsList[index].groupID ,
+                                        thisGroup: groupController.myGroupsList[index] ,
+                                      ),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(bottom: 10),
+                                      child: Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 16.w,
+                                            backgroundImage: NetworkImage(
+                                                groupController
+                                                    .myGroupsList[index]
+                                                    .groupPictureURL),
                                           ),
-                                        );
-                                      },
-                                      itemCount: groupController.myGroupsList.length,
+                                          SizedBox(
+                                            width: 8.w,
+                                          ),
+                                          CustomText(
+                                            text: groupController
+                                                .myGroupsList[index].groupName,
+                                            fontSize: 16.sp,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  );
+                                },
+                                itemCount: groupController.myGroupsList.length,
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.white,
+                      ),
                     ),
                   ),
-                  floatingActionButtonLocation:
-                      FloatingActionButtonLocation.centerDocked,
-                ),
-              );
+                );
+              },
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            ),
+            floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked,
+          ),
+        );
       },
     );
+
+    // return Obx(
+    //   () {
+    //     return (Get.find<AuthViewModel>().userEmail == null)
+    //         ? LoginView()
+    //         : GetBuilder<ControlHomeViewModel>(
+    //             init: ControlHomeViewModel(),
+    //             builder: (controller) => Scaffold(
+    //               body: controller.currentScreen,
+    //               bottomNavigationBar: _bottomNavigationBar(),
+    //               floatingActionButton: FloatingActionButton(
+    //                 backgroundColor: kMainColor,
+    //                 onPressed: () {
+    //                   Get.bottomSheet(
+    //                     GetBuilder<GroupViewModel>(
+    //                       init: GroupViewModel(),
+    //                       builder: (groupController) => Container(
+    //                         height: 600.h,
+    //                         width: 375.w,
+    //                         color: Colors.white,
+    //                         child: Padding(
+    //                           padding: const EdgeInsets.symmetric(horizontal: 10),
+    //                           child: Column(
+    //                             children: [
+    //                               SizedBox(
+    //                                 height: 10.h,
+    //                               ),
+    //                               CustomText(
+    //                                 text: "Select Group",
+    //                                 fontSize: 18.sp,
+    //                                 fontWeight: FontWeight.bold,
+    //                                 textAlignment: Alignment.centerLeft,
+    //                               ),
+    //                               Divider(color: Colors.grey,),
+    //                               Expanded(
+    //                                 child: ListView.builder(
+    //                                   itemBuilder: (context, index) {
+    //                                     return InkWell(
+    //                                       onTap: (){
+    //                                         Get.to(()=> CreatePostView(
+    //                                           groupAdminId: groupController.myGroupsList[index].admin,
+    //                                           groupId: groupController.myGroupsList[index].groupID ,
+    //                                           thisGroup: groupController.myGroupsList[index] ,
+    //                                         ),
+    //                                         );
+    //                                       },
+    //                                       child: Padding(
+    //                                         padding: const EdgeInsets.only(bottom: 10),
+    //                                         child: Row(
+    //                                           children: [
+    //                                             CircleAvatar(
+    //                                               radius: 16.w,
+    //                                               backgroundImage: NetworkImage(
+    //                                                   groupController
+    //                                                       .myGroupsList[index]
+    //                                                       .groupPictureURL),
+    //                                             ),
+    //                                             SizedBox(
+    //                                               width: 8.w,
+    //                                             ),
+    //                                             CustomText(
+    //                                               text: groupController
+    //                                                   .myGroupsList[index].groupName,
+    //                                               fontSize: 16.sp,
+    //                                             ),
+    //                                           ],
+    //                                         ),
+    //                                       ),
+    //                                     );
+    //                                   },
+    //                                   itemCount: groupController.myGroupsList.length,
+    //                                 ),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ),
+    //                       ),
+    //                     ),
+    //                   );
+    //                 },
+    //                 child: Icon(
+    //                   Icons.add,
+    //                   color: Colors.white,
+    //                 ),
+    //               ),
+    //               floatingActionButtonLocation:
+    //                   FloatingActionButtonLocation.centerDocked,
+    //             ),
+    //           );
+    //   },
+    // );
   }
 
   Widget _bottomNavigationBar() {

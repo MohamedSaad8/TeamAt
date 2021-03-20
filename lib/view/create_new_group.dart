@@ -79,7 +79,7 @@ class CreateGroupView extends StatelessWidget {
                               controller.groupName = val;
                             },
                             validator: (val) {
-                              if (val.isEmpty) return "Group Name Is Empty";
+                              if (val.isEmpty) return "Group Name Is Empty".tr;
                             },
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(20.h),
@@ -130,7 +130,7 @@ class CreateGroupView extends StatelessWidget {
                             },
                             validator: (val) {
                               if (val.isEmpty)
-                                Get.snackbar("erorr", "Please add Desciption",
+                                Get.snackbar("erorr".tr, "Please add Desciption".tr,
                                     snackPosition: SnackPosition.BOTTOM);
                             },
                             maxLines: 6,
@@ -216,26 +216,32 @@ class CreateGroupView extends StatelessWidget {
                       text: "Create group".tr,
                       onClick: () async {
                         if (_key.currentState.validate()) {
-                          _key.currentState.save();
-                          controller.changeIsLoading(true);
-                          await controller.uploadImage();
-                          print("upload done");
-                          await controller.addGroupToFireStore(GroupModel(
-                            admin: UserModel.currentUser.userID,
-                            confirmedUsers: [UserModel.currentUser.userID],
-                            unConfirmedUsers: [],
-                            groupDescription: controller.groupDescription,
-                            groupLatitude: controller.groupLatitude,
-                            groupLongitude: controller.groupLongitude,
-                            groupName: controller.groupName,
-                            groupPictureURL: controller.groupImageURL,
-                            groupID: Uuid().v4(),
-                          ));
-                          controller.changeIsLoading(false);
-                          _controller1.clear();
-                          _controller2.clear();
-                          controller.setImageEqualNull();
-                          Navigator.pop(context);
+                          if(controller.groupImage != null)
+                            {
+                              _key.currentState.save();
+                              controller.changeIsLoading(true);
+                              await controller.uploadImage();
+                              print("upload done");
+                              await controller.addGroupToFireStore(GroupModel(
+                                admin: UserModel.currentUser.userID,
+                                confirmedUsers: [UserModel.currentUser.userID],
+                                unConfirmedUsers: [],
+                                groupDescription: controller.groupDescription,
+                                groupLatitude: controller.groupLatitude,
+                                groupLongitude: controller.groupLongitude,
+                                groupName: controller.groupName,
+                                groupPictureURL: controller.groupImageURL,
+                                groupID: Uuid().v4(),
+                              ));
+                              controller.changeIsLoading(false);
+                              _controller1.clear();
+                              _controller2.clear();
+                              controller.setImageEqualNull();
+                              Get.back();
+                            }
+                          else{
+                            Get.snackbar("Image Error", "Please select Image");
+                          }
 
                         }
                       },

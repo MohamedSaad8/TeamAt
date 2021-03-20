@@ -94,7 +94,7 @@ class ProfileView extends StatelessWidget {
                                       fontColor: kSecondColor,
                                     ),
                                     CustomText(
-                                      text: "Posts",
+                                      text: "Posts".tr,
                                       fontSize: 16.sp,
                                       fontColor: kSecondColor,
                                     )
@@ -108,7 +108,7 @@ class ProfileView extends StatelessWidget {
                                       fontColor: Colors.black,
                                     ),
                                     CustomText(
-                                      text: "My groups",
+                                      text: "My groups".tr,
                                       fontSize: 16.sp,
                                       fontColor: Colors.grey,
                                     )
@@ -123,7 +123,7 @@ class ProfileView extends StatelessWidget {
                                       fontColor: Colors.black,
                                     ),
                                     CustomText(
-                                      text: "Following groups",
+                                      text: "Following groups".tr,
                                       fontSize: 16.sp,
                                       fontColor: Colors.grey,
                                     )
@@ -139,7 +139,7 @@ class ProfileView extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: CustomText(
-                            text: "My Bio",
+                            text: "My Bio".tr,
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             textAlignment: Alignment.topLeft,
@@ -154,7 +154,9 @@ class ProfileView extends StatelessWidget {
                             textAlignment: Alignment.topLeft,
                           ),
                         ),
-                        SizedBox(height: 24.h,)
+                        SizedBox(
+                          height: 24.h,
+                        )
                       ],
                     );
                   }
@@ -259,9 +261,6 @@ class ProfileView extends StatelessWidget {
                                       : Colors.black,
                                 ),
                               ),
-                              SizedBox(
-                                width: 4.w,
-                              ),
                               GestureDetector(
                                 onTap: () async {
                                   await postController
@@ -269,26 +268,25 @@ class ProfileView extends StatelessWidget {
                                           postController
                                               .userPosts[index - 1].postId);
 
-                                  Get.to(() => CommentView(
-                                        thisGroup: postController.getGroup(
-                                            postController
-                                                .userPosts[index - 1].groupId),
-                                        thePost:
-                                            postController.userPosts[index - 1],
-                                        postId: postController
-                                            .userPosts[index - 1].postId,
-                                      ));
-
-                                  // Get.to(() => CommentViewFromProfile(
-                                  //   postComments : postController.postComments,
-                                  //   thisGroup: postController.getGroup(postController.userPosts[index -1 ].groupId) ,
-                                  //   thePost: postController.userPosts[index -1 ] ,
-                                  //   postId:postController.userPosts[index -1 ].postId ,
-                                  // ));
+                                  Get.to(
+                                    () => CommentView(
+                                      thisGroup: postController.getGroup(
+                                          postController
+                                              .userPosts[index - 1].groupId),
+                                      thePost:
+                                          postController.userPosts[index - 1],
+                                      postId: postController
+                                          .userPosts[index - 1].postId,
+                                    ),
+                                  );
                                 },
-                                child: Icon(
-                                  Icons.messenger_outline,
-                                  size: 25.w,
+                                child: Container(
+                                  child: Image(
+                                    image: ExactAssetImage(
+                                        "assets/images/commentIcon.png"),
+                                    //sss width: 35.w,
+                                    height: 35.w,
+                                  ),
                                 ),
                               )
                             ],
@@ -336,7 +334,7 @@ class ProfileView extends StatelessWidget {
             : Column(
                 children: [
                   SizedBox(
-                    height: 70.h,
+                    height: 60.h,
                   ),
                   Container(
                     width: size.width,
@@ -391,7 +389,7 @@ class ProfileView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Container(
-                      height: 50.h,
+                      height: 65.h,
                       width: size.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -399,12 +397,13 @@ class ProfileView extends StatelessWidget {
                           Column(
                             children: [
                               CustomText(
-                                text: "48",
+                                text:
+                                    postController.userPosts.length.toString(),
                                 fontSize: 16.sp,
                                 fontColor: kSecondColor,
                               ),
                               CustomText(
-                                text: "Posts",
+                                text: "Posts".tr,
                                 fontSize: 16.sp,
                                 fontColor: kSecondColor,
                               )
@@ -413,12 +412,12 @@ class ProfileView extends StatelessWidget {
                           Column(
                             children: [
                               CustomText(
-                                text: "10",
+                                text: postController.myGroups.toString(),
                                 fontSize: 16.sp,
                                 fontColor: Colors.black,
                               ),
                               CustomText(
-                                text: "My groups",
+                                text: "My groups".tr,
                                 fontSize: 16.sp,
                                 fontColor: Colors.grey,
                               )
@@ -427,12 +426,12 @@ class ProfileView extends StatelessWidget {
                           Column(
                             children: [
                               CustomText(
-                                text: "10",
+                                text: postController.followingGroups.toString(),
                                 fontSize: 16.sp,
                                 fontColor: Colors.black,
                               ),
                               CustomText(
-                                text: "Following groups",
+                                text: "Following groups".tr,
                                 fontSize: 16.sp,
                                 fontColor: Colors.grey,
                               )
@@ -448,7 +447,7 @@ class ProfileView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: CustomText(
-                      text: "My Bio",
+                      text: "My Bio".tr,
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       textAlignment: Alignment.topLeft,
@@ -463,16 +462,8 @@ class ProfileView extends StatelessWidget {
                       textAlignment: Alignment.topLeft,
                     ),
                   ),
-                  SizedBox(height: 24.h,),
-                  Expanded(
-                    child: Center(
-                      child: CustomText(
-                        text: "No Posts Tell Now",
-                        fontColor: Colors.black,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  SizedBox(
+                    height: 24.h,
                   )
                 ],
               ),

@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:team_at/helper/constant.dart';
-import 'package:team_at/model/comment_model.dart';
 import 'package:team_at/model/group_model.dart';
-import 'package:team_at/model/message_model.dart';
 import 'package:team_at/model/user_model.dart';
 import 'package:team_at/view/message_view.dart';
 import 'package:team_at/viewModel/group_view_model.dart';
@@ -14,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:team_at/view/accept_refuse_view.dart';
 import 'package:team_at/viewModel/posts_view_model.dart';
 import 'package:team_at/view/create_post_view.dart';
-import 'package:uuid/uuid.dart';
 import 'package:team_at/view/comment_view.dart';
 
 class GroupView extends StatelessWidget {
@@ -113,18 +109,18 @@ class GroupView extends StatelessWidget {
                                         child: CustomButton(
                                           text: thisGroup.admin ==
                                                   UserModel.currentUser.userID
-                                              ? "Edit group"
+                                              ? "Edit group".tr
                                               : thisGroup.confirmedUsers
                                                       .contains(UserModel
                                                           .currentUser.userID)
-                                                  ? "Leave Group"
+                                                  ? "Leave Group".tr
                                                   : thisGroup.unConfirmedUsers
                                                           .contains(UserModel
                                                               .currentUser
                                                               .userID)
-                                                      ? "cancel request"
-                                                      : "Join Group",
-                                          buttonFontSize: 14,
+                                                      ? "cancel request".tr
+                                                      : "Join Group".tr,
+                                          buttonFontSize: 14.sp,
                                           buttonHeight: 40.h,
                                           buttonWidth: 104.w,
                                           buttonRadius: 6,
@@ -135,7 +131,6 @@ class GroupView extends StatelessWidget {
                                                 true) {
                                               await controller
                                                   .cancelRequest(thisGroup);
-                                              print("from one");
                                             } else if (thisGroup
                                                         .unConfirmedUsers
                                                         .contains(UserModel
@@ -152,7 +147,6 @@ class GroupView extends StatelessWidget {
                                                         .currentUser.userID) {
                                               await controller
                                                   .joinToGroup(thisGroup);
-                                              print("from two");
                                             } else if (thisGroup
                                                         .unConfirmedUsers
                                                         .contains(UserModel
@@ -184,7 +178,7 @@ class GroupView extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20),
                                   child: CustomText(
-                                    text: "About group",
+                                    text: "About group".tr,
                                     fontColor: Colors.black,
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
@@ -201,14 +195,14 @@ class GroupView extends StatelessWidget {
                               ],
                             );
                           }
-
                           return Padding(
                             padding: const EdgeInsets.only(
                                 left: 15, right: 15, bottom: 12, top: 0),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                border: Border.all(color: Colors.grey.shade300 ,width: 1),
+                                border: Border.all(
+                                    color: Colors.grey.shade300, width: 1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Column(
@@ -274,7 +268,7 @@ class GroupView extends StatelessWidget {
                                   left: 16.h,
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(top: 40.h),
+                                  padding: EdgeInsets.only(top: 25.h),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -316,16 +310,16 @@ class GroupView extends StatelessWidget {
                                   child: CustomButton(
                                     text: thisGroup.admin ==
                                             UserModel.currentUser.userID
-                                        ? "Edit group"
+                                        ? "Edit group".tr
                                         : thisGroup.confirmedUsers.contains(
                                                 UserModel.currentUser.userID)
-                                            ? "Leave Group"
+                                            ? "Leave Group".tr
                                             : thisGroup.unConfirmedUsers
                                                     .contains(UserModel
                                                         .currentUser.userID)
-                                                ? "cancel request"
-                                                : "Join Group",
-                                    buttonFontSize: 14,
+                                                ? "cancel request".tr
+                                                : "Join Group".tr,
+                                    buttonFontSize: 14.sp,
                                     buttonHeight: 40.h,
                                     buttonWidth: 104.w,
                                     buttonRadius: 6,
@@ -335,7 +329,6 @@ class GroupView extends StatelessWidget {
                                           true) {
                                         await controller
                                             .cancelRequest(thisGroup);
-                                        print("from one");
                                       } else if (thisGroup.unConfirmedUsers
                                                   .contains(UserModel
                                                       .currentUser.userID) ==
@@ -347,7 +340,6 @@ class GroupView extends StatelessWidget {
                                           thisGroup.admin !=
                                               UserModel.currentUser.userID) {
                                         await controller.joinToGroup(thisGroup);
-                                        print("from two");
                                       } else if (thisGroup.unConfirmedUsers
                                                   .contains(UserModel
                                                       .currentUser.userID) ==
@@ -374,7 +366,7 @@ class GroupView extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: CustomText(
-                              text: "About group",
+                              text: "About group".tr,
                               fontColor: Colors.black,
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
@@ -388,16 +380,13 @@ class GroupView extends StatelessWidget {
                           SizedBox(
                             height: 8.h,
                           ),
-                          Expanded(
-                            child: Center(
-                              child: CustomText(
-                                text: "No posts in this group till now",
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                                fontColor: Colors.black,
-                              ),
+                          Expanded(child: Center(
+                            child: CustomText(
+                              text: "noPosts".tr,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.sp,
                             ),
-                          )
+                          ))
                         ],
                       ),
               ),
@@ -452,8 +441,9 @@ class GroupView extends StatelessWidget {
               }
             } else {
               Get.defaultDialog(
-                  title: "Request Not Valid",
-                  middleText: "Please join to the group");
+                  radius: 12,
+                  title: "Request Not Valid".tr,
+                  middleText: "Please join to the group".tr);
             }
           },
           child: Icon(
@@ -478,9 +468,12 @@ class GroupView extends StatelessWidget {
                   postId: postController.groupPosts[index].postId,
                 ));
           },
-          child: Icon(
-            Icons.messenger_outline,
-            size: 25.w,
+          child: Container(
+            child: Image(
+              image: ExactAssetImage("assets/images/commentIcon.png"),
+              //sss width: 35.w,
+              height: 35.w,
+            ),
           ),
         )
       ],
@@ -619,8 +612,8 @@ class GroupView extends StatelessWidget {
                                       CustomText(
                                         text: thisGroup.admin ==
                                                 thisGroup.confirmedUsers[index]
-                                            ? "admin"
-                                            : "Member",
+                                            ? "admin".tr
+                                            : "Member".tr,
                                         fontSize: 14.sp,
                                         fontColor: Colors.grey.shade500,
                                       )
@@ -641,9 +634,9 @@ class GroupView extends StatelessWidget {
                 );
               } else {
                 Get.defaultDialog(
-                    title: "Request Not Valid",
+                    title: "Request Not Valid".tr,
                     radius: 12,
-                    middleText: "Please join to the group tp up Posts");
+                    middleText: "Please join to the group tp up Posts".tr);
               }
             },
             child: Container(
@@ -667,7 +660,17 @@ class GroupView extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-             Get.to(() => MessageView(group: group,));
+              if (thisGroup.confirmedUsers
+                  .contains(UserModel.currentUser.userID)) {
+                Get.to(() => MessageView(
+                      group: group,
+                    ));
+              } else {
+                Get.defaultDialog(
+                    title: "Request Not Valid".tr,
+                    radius: 12,
+                    middleText: "Please join to the group to Starting Chat".tr);
+              }
             },
             child: Container(
               width: 106.w,
@@ -687,7 +690,7 @@ class GroupView extends StatelessWidget {
                     width: 5.w,
                   ),
                   CustomText(
-                    text: "Message",
+                    text: "Message".tr,
                     fontSize: 12.sp,
                     fontColor: Colors.grey.shade500,
                   ),
@@ -708,9 +711,9 @@ class GroupView extends StatelessWidget {
                 );
               } else {
                 Get.defaultDialog(
-                    title: "Request Not Valid",
+                    title: "Request Not Valid".tr,
                     radius: 12,
-                    middleText: "Please join to the group tp up Posts");
+                    middleText: "Please join to the group tp up Posts".tr);
               }
             },
             child: Container(

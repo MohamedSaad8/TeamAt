@@ -36,7 +36,7 @@ class AcceptRefuseView extends StatelessWidget {
                   width: 5.w,
                 ),
                 CustomText(
-                  text: "Requests",
+                  text: "Requests".tr,
                   fontWeight: FontWeight.bold,
                   fontSize: 16.sp,
                 )
@@ -76,7 +76,7 @@ class AcceptRefuseView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           CustomButton(
-                            text: "Accept",
+                            text: "Accept".tr,
                             buttonFontSize: 14,
                             buttonHeight: 40.h,
                             buttonWidth: 104.w,
@@ -87,7 +87,7 @@ class AcceptRefuseView extends StatelessWidget {
                             },
                           ),
                           CustomButton(
-                            text: "Refuse",
+                            text: "Refuse".tr,
                             buttonFontSize: 14,
                             buttonHeight: 40.h,
                             buttonWidth: 104.w,

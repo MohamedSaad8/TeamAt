@@ -26,6 +26,7 @@ class AuthViewModel extends GetxController {
   double longitude;
   double latitude;
   File profileImage;
+  String countryCode;
   String country ;
   bool isLoading = false ;
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -40,8 +41,6 @@ class AuthViewModel extends GetxController {
   }
 
   ///-----------------------------------------------------------------------------
-
-
 
   signInWithEmailAndPassword() async {
     SharedPreferences preferences = await SharedPreferences.getInstance() ;

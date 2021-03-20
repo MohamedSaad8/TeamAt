@@ -23,21 +23,21 @@ class CustomTextFormField extends StatelessWidget {
 
   CustomTextFormField(
       {this.withSuffixIcon = false,
-      @required this.validator,
-      @required this.onSave,
-      this.obscureText = false,
-      this.keyboardType = TextInputType.text,
-      @required this.hintText,
-      @required this.prefixIcon,
-      this.filled = false,
-      this.prefixIconColor = Colors.black,
-      this.fillColor = Colors.white,
-      this.focusedBorderColor = kMainColor,
-      this.borderColor = Colors.black,
-      this.cursorColor = Colors.black,
-      this.borderWidth = 2.0,
-      this.borderRadius = 20.0,
-      this.fieldWidth = 375 ,
+        @required this.validator,
+        @required this.onSave,
+        this.obscureText = false,
+        this.keyboardType = TextInputType.text,
+        @required this.hintText,
+        @required this.prefixIcon,
+        this.filled = false,
+        this.prefixIconColor = Colors.black,
+        this.fillColor = Colors.white,
+        this.focusedBorderColor = kMainColor,
+        this.borderColor = Colors.black,
+        this.cursorColor = Colors.black,
+        this.borderWidth = 2.0,
+        this.borderRadius = 20.0,
+        this.fieldWidth = 375 ,
         this.fieldHeight = 60 ,
       });
 
@@ -48,51 +48,52 @@ class CustomTextFormField extends StatelessWidget {
       height: fieldHeight,
       child: TextFormField(
         validator: validator,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         onSaved: onSave,
         obscureText: obscureText,
         keyboardType: keyboardType,
         cursorColor: cursorColor,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(20.h),
-          isDense: true,
-          hintText: hintText,
-          suffixIcon: withSuffixIcon
-              ? Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: Color(0xff757575),
-                )
-              : Container(
-                  width: 0,
-                  height: 0,
-                ),
-          prefixIcon: Icon(
-            prefixIcon,
-            color: prefixIconColor,
-          ),
-          errorStyle: TextStyle(fontSize: 10.sp , fontFamily: "Cairo"),
-          filled: filled,
-          fillColor: fillColor,
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: borderColor,
-              width: borderWidth,
+            contentPadding: EdgeInsets.all(20.h),
+            isDense: true,
+            hintText: hintText,
+            suffixIcon: withSuffixIcon
+                ? Icon(
+              Icons.remove_red_eye_outlined,
+              color: Color(0xff757575),
+            )
+                : Container(
+              width: 0,
+              height: 0,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: focusedBorderColor,
-              width: borderWidth,
+            prefixIcon: Icon(
+              prefixIcon,
+              color: prefixIconColor,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.red,
-              width: borderWidth,
+            errorStyle: TextStyle(fontSize: 10.sp , fontFamily: "Cairo"),
+            filled: filled,
+            fillColor: fillColor,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: borderColor,
+                width: borderWidth,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
             ),
-            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-          )
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: focusedBorderColor,
+                width: borderWidth,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.red,
+                width: borderWidth,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+            )
         ),
       ),
     );

@@ -63,10 +63,10 @@ class RegisterView extends StatelessWidget {
         text: "Sign Up".tr,
         onClick: () {
           if(_key.currentState.validate())
-            {
-              _key.currentState.save();
-              Get.to(() => AddPhoneNumber());
-            }
+          {
+            _key.currentState.save();
+            Get.to(() => AddPhoneNumber());
+          }
         },
         buttonRadius: 9.0,
       ),

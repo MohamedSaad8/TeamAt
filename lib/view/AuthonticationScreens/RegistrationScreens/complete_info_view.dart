@@ -48,8 +48,8 @@ class CompleteUserInfo extends StatelessWidget {
                     },
                     child: CircleAvatar(
                       radius: 100.w,
-                       backgroundImage: controller.profileImage == null ? AssetImage("assets/images/avator.jpg") :
-                       FileImage(controller.profileImage),
+                      backgroundImage: controller.profileImage == null ? AssetImage("assets/images/avator.jpg") :
+                      FileImage(controller.profileImage),
                     ),
                   ),
                 ),
@@ -65,7 +65,7 @@ class CompleteUserInfo extends StatelessWidget {
                     child: Column(
                       children: [
                         CustomText(
-                          text: "Name".tr,
+                          text: "Bio".tr,
                           fontColor: Colors.black,
                           textAlignment: Alignment.centerLeft,
                           fontSize: 16.sp,
@@ -79,7 +79,7 @@ class CompleteUserInfo extends StatelessWidget {
                             prefixIconColor: Color(0xff9a9595),
                             focusedBorderColor: kSecondColor,
                             validator: (val) {
-                              if (val.isEmpty) return "nameEmpty".tr;
+                              if (val.isEmpty) return "BioEmpty".tr;
                             },
                             borderRadius: 0,
                             onSave: (val) {
@@ -108,12 +108,12 @@ class CompleteUserInfo extends StatelessWidget {
                       if (_key.currentState.validate()){
                         _key.currentState.save();
                         if(controller.profileImage !=null)
-                          {
-                           controller.changeIsLoading(true);
-                           await controller.uploadImage();
-                           controller.changeIsLoading(false) ;
-                            Get.to(CurrentLocationView());
-                          }
+                        {
+                          controller.changeIsLoading(true);
+                          await controller.uploadImage();
+                          controller.changeIsLoading(false) ;
+                          Get.to(CurrentLocationView());
+                        }
 
                       }
                     },

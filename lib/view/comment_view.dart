@@ -52,7 +52,7 @@ class CommentView extends StatelessWidget {
                         },
                       ),
                       CustomText(
-                        text: "Comments",
+                        text: "Comments".tr,
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         fontColor: Colors.black,
@@ -146,7 +146,7 @@ class CommentView extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.only(top: 5),
                                     child: Text(
-                                      "view all comments",
+                                      "view all comments".tr,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16.sp,
@@ -170,7 +170,7 @@ class CommentView extends StatelessWidget {
                     },
                     validator: (val) {
                       if (val.isEmpty)
-                        Get.snackbar("Comment Error", "Please Enter Comment");
+                        Get.snackbar("Comment Error".tr, "Please Enter Comment".tr);
                     },
                     decoration: InputDecoration(
                       hintText: "Write a comment",
@@ -198,7 +198,8 @@ class CommentView extends StatelessWidget {
                           child: Icon(
                             Icons.send_outlined,
                             color: kSecondColor,
-                          )),
+                          ),
+                      ),
                     ),
                   ),
                 ],

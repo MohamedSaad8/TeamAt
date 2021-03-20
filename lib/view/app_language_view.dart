@@ -68,7 +68,7 @@ class AppLanguageView extends StatelessWidget {
                 buttonFontSize: 16.sp,
                 buttonHeight: 58.h,
                 onClick: () {
-                  Get.to(WelcomeView());
+                  Get.off(() => WelcomeView());
                 },
                 text: "next".tr,
               ),

@@ -36,11 +36,11 @@ class PostsViewModel extends GetxController
 
 
 
+
   @override
   void onInit() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String userID = preferences.getString("userID");
-    print("user id is $userID");
     await getUserFromFireStore(userID);
     await getAllUser();
     await getAllGroups();
@@ -223,7 +223,7 @@ class PostsViewModel extends GetxController
         {
           myGroups++;
         }
-        else
+        if(group.confirmedUsers.contains(UserModel.currentUser.userID) && group.admin != UserModel.currentUser.userID )
           {
             followingGroups++;
           }

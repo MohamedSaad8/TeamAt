@@ -10,12 +10,12 @@ class Binding extends Bindings
 {
   @override
   void dependencies() {
-    Get.lazyPut(() => LanguageLocalStorage());
-    Get.lazyPut(() => AppLanguageViewModel());
-    Get.lazyPut(() => AuthViewModel());
-    Get.lazyPut(() => ControlHomeViewModel());
-    Get.lazyPut(() => PostsViewModel());
-    Get.lazyPut(() => GroupViewModel());
+    Get.put(() => LanguageLocalStorage());
+    Get.put(() => AppLanguageViewModel());
+    Get.put(() => AuthViewModel());
+    Get.put(() => ControlHomeViewModel());
+    Get.put(() => PostsViewModel());
+    Get.put(() => GroupViewModel());
   }
 
 }

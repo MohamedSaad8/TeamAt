@@ -51,7 +51,7 @@ class MessageView extends StatelessWidget {
                         },
                       ),
                       CustomText(
-                        text: group.groupName + " Chat",
+                        text: group.groupName + " Chat".tr,
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         fontColor: Colors.black,
@@ -136,7 +136,7 @@ class MessageView extends StatelessWidget {
                       messageContent = val;
                     },
                     decoration: InputDecoration(
-                      hintText: "Write a message",
+                      hintText: "Write a message".tr,
                       contentPadding: EdgeInsets.only(left: 10, top: 15),
                       suffixIcon: GestureDetector(
                         onTap: () async {

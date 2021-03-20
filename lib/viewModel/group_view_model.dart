@@ -27,6 +27,7 @@ class GroupViewModel extends GetxController {
   List<GroupModel> myGroupsList = [];
   List<GroupModel> otherGroups = [];
   List<UserModel> allUsers = [] ;
+  List<GroupModel> allGroups = [];
 
 
 
@@ -45,8 +46,7 @@ class GroupViewModel extends GetxController {
     update();
   }
 
-  setImageEqualNull()
-  {
+  setImageEqualNull() {
     groupImage = null ;
     update();
 
@@ -55,6 +55,7 @@ class GroupViewModel extends GetxController {
   getGroups() async {
     myGroupsList.clear();
     otherGroups.clear();
+    allGroups.clear();
     try {
       var snapShot = await FireStoreGroups().groupCollectionRef.get();
       for (var doc in snapShot.docs) {
@@ -69,6 +70,7 @@ class GroupViewModel extends GetxController {
         } else {
           otherGroups.add(GroupModel.fromJson(data));
         }
+        allGroups.add(GroupModel.fromJson(data));
       }
     } catch (e) {
       myGroupsList = [];

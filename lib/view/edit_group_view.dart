@@ -4,16 +4,16 @@ import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:team_at/helper/constant.dart';
 import 'package:team_at/model/group_model.dart';
-import 'package:team_at/model/user_model.dart';
 import 'package:team_at/viewModel/group_view_model.dart';
 import 'package:team_at/widget/CustomButton.dart';
 import 'package:team_at/widget/custom_text.dart';
-import 'package:uuid/uuid.dart';
 
-class CreateGroupView extends StatelessWidget {
+class EditGroupView extends StatelessWidget {
+  final GroupModel thisGroup;
+
+  EditGroupView(this.thisGroup);
+
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final _controller1 =TextEditingController();
-  final _controller2 =TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class CreateGroupView extends StatelessWidget {
       body: GetBuilder<GroupViewModel>(
         init: GroupViewModel(),
         builder: (controller) => ModalProgressHUD(
-          inAsyncCall: controller.isLoading ,
+          inAsyncCall: controller.isLoading,
           child: SingleChildScrollView(
             child: Form(
               key: _key,
@@ -55,7 +55,7 @@ class CreateGroupView extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 64.w,
                       backgroundImage: controller.groupImage == null
-                          ? AssetImage("assets/images/component1.png")
+                          ? NetworkImage(thisGroup.groupPictureURL)
                           : FileImage(controller.groupImage),
                     ),
                   ),
@@ -74,7 +74,7 @@ class CreateGroupView extends StatelessWidget {
                         SizedBox(height: 8.h),
                         Expanded(
                           child: TextFormField(
-                            controller: _controller1,
+                            initialValue: thisGroup.groupName,
                             onSaved: (val) {
                               controller.groupName = val;
                             },
@@ -124,13 +124,14 @@ class CreateGroupView extends StatelessWidget {
                         ),
                         Expanded(
                           child: TextFormField(
-                            controller: _controller2,
+                            initialValue: thisGroup.groupDescription,
                             onSaved: (val) {
                               controller.groupDescription = val;
                             },
                             validator: (val) {
                               if (val.isEmpty)
-                                Get.snackbar("erorr".tr, "Please add Desciption".tr,
+                                Get.snackbar(
+                                    "erorr".tr, "Please add Desciption".tr,
                                     snackPosition: SnackPosition.BOTTOM);
                             },
                             maxLines: 6,
@@ -191,11 +192,13 @@ class CreateGroupView extends StatelessWidget {
                             width: 40.h,
                           ),
                           CustomText(
-                            text: controller.groupLongitude == null
-                                ? "Set your location".tr
-                                : controller.groupLongitude.toString() +
+                            text: (controller.groupLatitude == null)
+                                ? thisGroup.groupLatitude.toString() +
                                     "," +
-                                    controller.groupLatitude.toString(),
+                                    thisGroup.groupLongitude.toString()
+                                : controller.groupLatitude.toString() +
+                                    "," +
+                                    controller.groupLongitude.toString(),
                             fontColor: Colors.grey.shade700,
                             fontWeight: FontWeight.bold,
                             fontSize: 18.sp,
@@ -213,36 +216,40 @@ class CreateGroupView extends StatelessWidget {
                       buttonFontSize: 16.sp,
                       buttonHeight: 58.h,
                       buttonWidth: size.width,
-                      text: "Create group".tr,
+                      text: "Save Changes".tr,
                       onClick: () async {
                         if (_key.currentState.validate()) {
-                          if(controller.groupImage != null && controller.groupLatitude != null)
-                            {
-                              _key.currentState.save();
-                              controller.changeIsLoading(true);
-                              await controller.uploadImage();
-                              print("upload done");
-                              await controller.addGroupToFireStore(GroupModel(
-                                admin: UserModel.currentUser.userID,
-                                confirmedUsers: [UserModel.currentUser.userID],
-                                unConfirmedUsers: [],
-                                groupDescription: controller.groupDescription,
-                                groupLatitude: controller.groupLatitude,
-                                groupLongitude: controller.groupLongitude,
-                                groupName: controller.groupName,
-                                groupPictureURL: controller.groupImageURL,
-                                groupID: Uuid().v4(),
-                              ));
-                              controller.changeIsLoading(false);
-                              _controller1.clear();
-                              _controller2.clear();
-                              controller.setImageEqualNull();
-                              Get.back();
-                            }
-                          else{
-                            Get.snackbar("Image Error".tr, "Please select Image".tr);
+                          _key.currentState.save();
+                          controller.changeIsLoading(true);
+                          if (controller.groupImage != null) {
+                            await controller.uploadImage();
+                            print("upload done");
                           }
-
+                          await controller.editGroup(GroupModel(
+                            groupID: thisGroup.groupID,
+                            confirmedUsers: thisGroup.confirmedUsers,
+                            unConfirmedUsers: thisGroup.unConfirmedUsers,
+                            admin: thisGroup.admin,
+                            groupName: controller.groupName == null
+                                ? thisGroup.groupName
+                                : controller.groupName,
+                            groupDescription:
+                                controller.groupDescription == null
+                                    ? thisGroup.groupDescription
+                                    : controller.groupDescription,
+                            groupLatitude: controller.groupLatitude == null
+                                ? thisGroup.groupLatitude
+                                : controller.groupLatitude,
+                            groupLongitude: controller.groupLongitude == null
+                                ? thisGroup.groupLongitude
+                                : controller.groupLongitude,
+                            groupPictureURL: controller.groupImageURL == null
+                                ? thisGroup.groupPictureURL
+                                : controller.groupImageURL,
+                          ));
+                          controller.changeIsLoading(false);
+                          Get.back();
+                          Get.back();
                         }
                       },
                       buttonRadius: 9.0,

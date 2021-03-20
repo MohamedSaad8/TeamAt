@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path/path.dart' as p;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,30 +15,34 @@ import 'package:team_at/servcies/firestore_post.dart';
 import 'package:team_at/servcies/getImage.dart';
 import 'package:team_at/model/comment_model.dart';
 
-class PostsViewModel extends GetxController
-{
-  String postContent ;
-  String postImageURL ;
+class PostsViewModel extends GetxController {
+  String postContent;
+
+  String postImageURL;
+
   String postId;
-  String groupId ;
-  String userId ;
-  String commentContent ;
-  File postImage ;
-  bool isLoading = false ;
- // List<dynamic> likes ;
-  List<CommentModel> postComments  = [] ;
+  String groupId;
+
+  String userId;
+
+  String commentContent;
+
+  File postImage;
+
+  bool isLoading = false;
+
+  // List<dynamic> likes ;
+  List<CommentModel> postComments = [];
+
   List<PostModel> groupPosts = [];
   List<PostModel> userPosts = [];
-  List<PostModel> followingGroupsPosts = [] ;
-  List<UserModel> allUsers = [] ;
+  List<PostModel> followingGroupsPosts = [];
+
+  List<UserModel> allUsers = [];
+
   List<GroupModel> allGroups = [];
   int myGroups = 0;
- int followingGroups = 0;
-
-
-
-
-
+  int followingGroups = 0;
 
   @override
   void onInit() async {
@@ -49,76 +56,103 @@ class PostsViewModel extends GetxController
     super.onInit();
   }
 
+  Future<Uint8List> getMarkerIcon({String url, int markerSize}) async {
+    try {
+      var markerImageFile = await DefaultCacheManager().getSingleFile(url);
+      var markerImageByte = await markerImageFile.readAsBytes();
+      var markerImageCodec = await instantiateImageCodec(
+        markerImageByte,
+        targetWidth: markerSize,
+        targetHeight: markerSize,
+      );
+      var frameInfo = await markerImageCodec.getNextFrame();
+      var byteData = await frameInfo.image.toByteData(
+        format: ImageByteFormat.png,
+      );
+      var resizedMarkerImageBytes = byteData.buffer.asUint8List();
+      return resizedMarkerImageBytes;
+    } catch (e) {
+      print(e.message);
+      return null;
+    }
+  }
+
   setImageEqualNull() {
-    postImage = null ;
-    postImageURL = "" ;
-    update();
-
-  }
-
-  changeIsLoading(bool newValue){
-    isLoading = newValue ;
+    postImage = null;
+    postImageURL = "";
     update();
   }
 
-  getUserFromFireStore(String userID) async{
-    await FirebaseFirestore.instance.collection("Users").doc(userID).get().then((value){
+  changeIsLoading(bool newValue) {
+    isLoading = newValue;
+    update();
+  }
+
+  getUserFromFireStore(String userID) async {
+    await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(userID)
+        .get()
+        .then((value) {
       UserModel.currentUser = UserModel.fromJson(value.data());
     });
     //
     update();
   }
 
-  Future<void> createPost(PostModel post , String groupId)async {
-    await FireStorePosts().postCollectionRef.doc(post.postId).set(post.toJson());
+  Future<void> createPost(PostModel post, String groupId) async {
+    await FireStorePosts()
+        .postCollectionRef
+        .doc(post.postId)
+        .set(post.toJson());
     getGroupPostsFromFireStore(groupId);
   }
 
-  getPostImageFromGallery()async {
-    postImage = File(await getImageFromGallery()) ;
+  getPostImageFromGallery() async {
+    postImage = File(await getImageFromGallery());
     update();
   }
 
-  getPostImageFromGCamera()async {
-    postImage = File(await getImageFromCamera()) ;
+  getPostImageFromGCamera() async {
+    postImage = File(await getImageFromCamera());
     update();
   }
 
   Future<void> uploadImage() async {
     try {
       FirebaseStorage firebaseStorage =
-      FirebaseStorage(storageBucket: 'gs://teamat-47704.appspot.com');
+          FirebaseStorage(storageBucket: 'gs://teamat-47704.appspot.com');
       StorageReference storageReference =
-      firebaseStorage.ref().child(p.basename(postImage.path));
+          firebaseStorage.ref().child(p.basename(postImage.path));
       StorageUploadTask storageUploadTask = storageReference.putFile(postImage);
       StorageTaskSnapshot snapshot = await storageUploadTask.onComplete;
       postImageURL = await snapshot.ref.getDownloadURL();
       update();
       print("uploaded done");
-
     } catch (ex) {
       print(ex.message);
     }
   }
 
-  addLike(PostModel post)async{
+  addLike(PostModel post) async {
     List<dynamic> likesList = post.likes;
     likesList.add(UserModel.currentUser.userID);
     PostModel newPost = PostModel(
-      postId: post.postId,
-      userId: post.userId,
-      postImageURL: post.postImageURL,
-      postContent: post.postContent,
-      groupId: post.groupId,
-      likes: likesList,
-      comments: post.comments
-    );
-    await FireStorePosts().postCollectionRef.doc(post.postId).update(newPost.toJson());
-     getGroupPostsFromFireStore(post.groupId);
-
+        postId: post.postId,
+        userId: post.userId,
+        postImageURL: post.postImageURL,
+        postContent: post.postContent,
+        groupId: post.groupId,
+        likes: likesList,
+        comments: post.comments);
+    await FireStorePosts()
+        .postCollectionRef
+        .doc(post.postId)
+        .update(newPost.toJson());
+    getGroupPostsFromFireStore(post.groupId);
   }
 
-  removeLike(PostModel post)async{
+  removeLike(PostModel post) async {
     List<dynamic> likesList = post.likes;
     likesList.remove(UserModel.currentUser.userID);
     PostModel newPost = PostModel(
@@ -128,15 +162,21 @@ class PostsViewModel extends GetxController
         postContent: post.postContent,
         groupId: post.groupId,
         likes: likesList,
-      comments: post.comments
-    );
-    await FireStorePosts().postCollectionRef.doc(post.postId).update(newPost.toJson());
+        comments: post.comments);
+    await FireStorePosts()
+        .postCollectionRef
+        .doc(post.postId)
+        .update(newPost.toJson());
     await getGroupPostsFromFireStore(post.groupId);
   }
 
-  getGroupPostsFromFireStore(String groupId)async{
+  getGroupPosts() {
+    return FireStorePosts().postCollectionRef.snapshots();
+  }
+
+  getGroupPostsFromFireStore(String groupId) async {
     groupPosts.clear();
-    try{
+    try {
       var snapShot = await FireStorePosts().postCollectionRef.get();
       for (var doc in snapShot.docs) {
         var data = doc.data();
@@ -144,16 +184,19 @@ class PostsViewModel extends GetxController
           groupPosts.add(PostModel.fromJson(data));
         }
       }
-    }catch(e){
+    } catch (e) {
       groupPosts = [];
     }
     update();
+  }
 
+  getPostComments() {
+    return FireStoreComments().commentCollectionRef.snapshots();
   }
 
   getPostCommentsFromFireStore(String postId) async {
     postComments.clear();
-    try{
+    try {
       var snapShot = await FireStoreComments().commentCollectionRef.get();
       for (var doc in snapShot.docs) {
         var data = doc.data();
@@ -161,16 +204,16 @@ class PostsViewModel extends GetxController
           postComments.add(CommentModel.fromJson(data));
         }
       }
-    }catch(e){
+    } catch (e) {
       postComments = [];
     }
 
     update();
   }
 
-  getAllPostsByUserId() async{
+  getAllPostsByUserId() async {
     userPosts.clear();
-    try{
+    try {
       var snapShot = await FireStorePosts().postCollectionRef.get();
       for (var doc in snapShot.docs) {
         var data = doc.data();
@@ -178,79 +221,82 @@ class PostsViewModel extends GetxController
           userPosts.add(PostModel.fromJson(data));
         }
       }
-    }catch(e){
+    } catch (e) {
       userPosts = [];
     }
     update();
-
   }
 
-  getAllFollowingGroupsPostsByUserId() async{
+  getTimeLinePosts() {
+    return FireStorePosts().postCollectionRef.snapshots();
+  }
+
+  getAllFollowingGroupsPostsByUserId() async {
     followingGroupsPosts.clear();
-    try{
+    try {
       var snapShot = await FireStorePosts().postCollectionRef.get();
       for (var doc in snapShot.docs) {
         var data = doc.data();
-        if (getGroup(data["groupId"]).confirmedUsers.contains(UserModel.currentUser.userID)) {
+        if (getGroup(data["groupId"])
+            .confirmedUsers
+            .contains(UserModel.currentUser.userID)) {
           followingGroupsPosts.add(PostModel.fromJson(data));
         }
       }
-    }catch(e){
+    } catch (e) {
       followingGroupsPosts = [];
     }
     update();
-
   }
 
-  getAllUser() async  {
-    await FirebaseFirestore.instance.collection("Users").get().then((value){
-      for(var doc in value.docs){
+  getAllUser() async {
+    await FirebaseFirestore.instance.collection("Users").get().then((value) {
+      for (var doc in value.docs) {
         allUsers.add(UserModel.fromJson(doc.data()));
       }
     });
     update();
   }
 
-  getAllGroups() async  {
-    await FirebaseFirestore.instance.collection("Groups").get().then((value){
-      for(var doc in value.docs){
+  getAllGroups() async {
+    await FirebaseFirestore.instance.collection("Groups").get().then((value) {
+      for (var doc in value.docs) {
         allGroups.add(GroupModel.fromJson(doc.data()));
       }
     });
-    for(GroupModel group in allGroups)
-      {
-        if(group.admin == UserModel.currentUser.userID)
-        {
-          myGroups++;
-        }
-        if(group.confirmedUsers.contains(UserModel.currentUser.userID) && group.admin != UserModel.currentUser.userID )
-          {
-            followingGroups++;
-          }
+    for (GroupModel group in allGroups) {
+      if (group.admin == UserModel.currentUser.userID) {
+        myGroups++;
       }
+      if (group.confirmedUsers.contains(UserModel.currentUser.userID) &&
+          group.admin != UserModel.currentUser.userID) {
+        followingGroups++;
+      }
+    }
     update();
   }
 
-  GroupModel getGroup (String groupId) {
-    GroupModel groupData ;
-    for(var group in allGroups){
-      if(group.groupID == groupId)
-        groupData = group;
+  GroupModel getGroup(String groupId) {
+    GroupModel groupData;
+    for (var group in allGroups) {
+      if (group.groupID == groupId) groupData = group;
     }
-    return groupData ;
+    return groupData;
   }
 
-  UserModel getUser (String userId) {
-    UserModel userData ;
-    for(var user in allUsers){
-      if(user.userID == userId)
-        userData = user;
+  UserModel getUser(String userId) {
+    UserModel userData;
+    for (var user in allUsers) {
+      if (user.userID == userId) userData = user;
     }
-    return userData ;
+    return userData;
   }
 
-  createComment({CommentModel comment, PostModel post, String groupId}) async{
-    await FireStoreComments().commentCollectionRef.doc(comment.commentId).set(comment.toJson());
+  createComment({CommentModel comment, PostModel post, String groupId}) async {
+    await FireStoreComments()
+        .commentCollectionRef
+        .doc(comment.commentId)
+        .set(comment.toJson());
     List<dynamic> commentList = post.comments;
     commentList.add(comment.commentId);
     PostModel newPost = PostModel(
@@ -260,17 +306,12 @@ class PostsViewModel extends GetxController
         postContent: post.postContent,
         groupId: post.groupId,
         likes: post.likes,
-        comments: commentList
-    );
-    await FireStorePosts().postCollectionRef.doc(post.postId).update(newPost.toJson());
+        comments: commentList);
+    await FireStorePosts()
+        .postCollectionRef
+        .doc(post.postId)
+        .update(newPost.toJson());
     await getPostCommentsFromFireStore(post.postId);
     await getAllPostsByUserId();
-
-
   }
-
-
-
-
-
 }

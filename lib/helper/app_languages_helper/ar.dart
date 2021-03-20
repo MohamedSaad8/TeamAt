@@ -99,6 +99,8 @@ const Map<String , String> ar = {
   "What\'s in your mind ?" : "ماذا يدور بعقلك" ,
   "Camera" :"كاميرا" ,
   "Photos" : "صوري" ,
+  "Please select Image" : "من فضلك املي جميع البيانات",
+  "Image Error" : "خطا في الطلب" ,
 
 
 };

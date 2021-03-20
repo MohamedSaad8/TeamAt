@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:team_at/helper/constant.dart';
@@ -16,6 +17,7 @@ class CommentView extends StatelessWidget {
   final postId;
 
   final PostModel thePost;
+  List<CommentModel> postComments = [];
 
   CommentView({this.thisGroup, this.postId, this.thePost});
 
@@ -63,9 +65,23 @@ class CommentView extends StatelessWidget {
                     height: 16.h,
                   ),
                   Expanded(
-                    child: postController.postComments.length > 0
-                        ? ListView.builder(
-                            itemBuilder: (context, position) {
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: postController.getPostComments(),
+                      builder: (context, snapShot) {
+                        postComments.clear();
+                        try {
+                          for (var doc in snapShot.data.docs) {
+                            var data = doc.data();
+                            if (data["postId"] == postId) {
+                              postComments.add(CommentModel.fromJson(data));
+                            }
+                          }
+                        } catch (e) {
+                          postComments = [];
+                        }
+                        return ListView.builder(
+                          itemBuilder: (context, position) {
+                            try {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
@@ -76,9 +92,9 @@ class CommentView extends StatelessWidget {
                                           radius: 16.w,
                                           backgroundImage: NetworkImage(
                                               postController
-                                                  .getUser(postController
-                                                      .postComments[position]
-                                                      .userId)
+                                                  .getUser(
+                                                      postComments[position]
+                                                          .userId)
                                                   .picURL),
                                         ),
                                         SizedBox(
@@ -90,9 +106,9 @@ class CommentView extends StatelessWidget {
                                           children: [
                                             CustomText(
                                               text: postController
-                                                  .getUser(postController
-                                                      .postComments[position]
-                                                      .userId)
+                                                  .getUser(
+                                                      postComments[position]
+                                                          .userId)
                                                   .userName,
                                               fontSize: 16.sp,
                                               fontColor: Colors.black,
@@ -111,8 +127,7 @@ class CommentView extends StatelessWidget {
                                             left: 40, bottom: 5),
                                         child: CustomText(
                                           textAlignment: Alignment.centerLeft,
-                                          text: postController
-                                              .postComments[position]
+                                          text: postComments[position]
                                               .commentContent,
                                           fontColor: Colors.black,
                                           fontSize: 14.sp,
@@ -127,40 +142,23 @@ class CommentView extends StatelessWidget {
                                   ],
                                 ),
                               );
-                            },
-                            itemCount: postController.postComments.length,
+                            } catch (e) {
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          itemCount: postComments.length,
 
-                            ///String comments ids
-                          )
-                        : InkWell(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 30,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: Text(
-                                      "view all comments".tr,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.sp,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            onTap: () async {
-                              postController
-                                  .getPostCommentsFromFireStore(postId);
-                            },
-                          ),
+                          ///String comments ids
+                        );
+                      },
+                    ),
                   ),
                   TextFormField(
                     controller: _controller,
@@ -170,35 +168,36 @@ class CommentView extends StatelessWidget {
                     },
                     validator: (val) {
                       if (val.isEmpty)
-                        Get.snackbar("Comment Error".tr, "Please Enter Comment".tr);
+                        Get.snackbar(
+                            "Comment Error".tr, "Please Enter Comment".tr);
                     },
                     decoration: InputDecoration(
                       hintText: "Write a comment",
                       contentPadding: EdgeInsets.only(left: 10, top: 15),
                       suffixIcon: GestureDetector(
-                          onTap: () async {
-                            if (_key.currentState.validate()) {
-                              _key.currentState.save();
-                              await postController.createComment(
-                                  groupId: thisGroup.groupID,
-                                  comment: CommentModel(
-                                      userId: UserModel.currentUser.userID,
-                                      postId: postId,
-                                      commentContent:
-                                          postController.commentContent,
-                                      commentId: Uuid().v4()),
-                                  post: thePost);
-                              _controller.clear();
-                              await postController.getAllPostsByUserId();
-                              await postController
-                                  .getPostCommentsFromFireStore(postId);
-                              // await postController.getPostCommentsFromFireStore(postController.groupPosts[index].postId);
-                            }
-                          },
-                          child: Icon(
-                            Icons.send_outlined,
-                            color: kSecondColor,
-                          ),
+                        onTap: () async {
+                          if (_key.currentState.validate()) {
+                            _key.currentState.save();
+                            await postController.createComment(
+                                groupId: thisGroup.groupID,
+                                comment: CommentModel(
+                                    userId: UserModel.currentUser.userID,
+                                    postId: postId,
+                                    commentContent:
+                                        postController.commentContent,
+                                    commentId: Uuid().v4()),
+                                post: thePost);
+                            _controller.clear();
+                            await postController.getAllPostsByUserId();
+                            await postController
+                                .getPostCommentsFromFireStore(postId);
+                            // await postController.getPostCommentsFromFireStore(postController.groupPosts[index].postId);
+                          }
+                        },
+                        child: Icon(
+                          Icons.send_outlined,
+                          color: kSecondColor,
+                        ),
                       ),
                     ),
                   ),

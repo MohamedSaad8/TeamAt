@@ -16,21 +16,19 @@ import 'package:team_at/widget/custom_text.dart';
 import 'package:path/path.dart' as p;
 
 class GroupViewModel extends GetxController {
-  String groupName ;
-  String groupDescription ;
-  double groupLongitude ;
-  double groupLatitude ;
-  File groupImage ;
+
+  String groupName;
+  String groupDescription;
+  double groupLongitude;
+  double groupLatitude;
+  File groupImage;
   String groupImageURL;
-  String groupID ;
-  bool isLoading = false ;
+  String groupID;
+  bool isLoading = false;
   List<GroupModel> myGroupsList = [];
   List<GroupModel> otherGroups = [];
-  List<UserModel> allUsers = [] ;
+  List<UserModel> allUsers = [];
   List<GroupModel> allGroups = [];
-
-
-
 
   @override
   void onInit() async {
@@ -39,17 +37,18 @@ class GroupViewModel extends GetxController {
     super.onInit();
   }
 
-
-
-  changeIsLoading(bool newValue){
-    isLoading = newValue ;
+  changeIsLoading(bool newValue) {
+    isLoading = newValue;
     update();
   }
 
   setImageEqualNull() {
-    groupImage = null ;
+    groupImage = null;
     update();
+  }
 
+  Stream<QuerySnapshot> getTeamAtGroups() {
+    return FireStoreGroups().groupCollectionRef.snapshots();
   }
 
   getGroups() async {
@@ -61,12 +60,12 @@ class GroupViewModel extends GetxController {
       for (var doc in snapShot.docs) {
         var data = doc.data();
         if (data["confirmedUsers"].contains(UserModel.currentUser.userID)) {
-          try{
+          try {
             myGroupsList.add(GroupModel.fromJson(data));
+          } catch (e) {
+            print(e);
           }
-          catch(e){print(e);}
           print("done");
-
         } else {
           otherGroups.add(GroupModel.fromJson(data));
         }
@@ -80,36 +79,43 @@ class GroupViewModel extends GetxController {
   }
 
   Future<void> addGroupToFireStore(GroupModel groupModel) async {
-    await FireStoreGroups().groupCollectionRef.doc(groupModel.groupID).set(groupModel.toJson());
+    await FireStoreGroups()
+        .groupCollectionRef
+        .doc(groupModel.groupID)
+        .set(groupModel.toJson());
     await getGroups();
   }
 
-  addMessageInGroupMessages(GroupModel group , MessageModel message) async{
-    await FireStoreGroups().groupCollectionRef.doc(group.groupID)
-        .collection("messages").doc(message.messageId.toString()).set(message.toJson());
+  addMessageInGroupMessages(GroupModel group, MessageModel message) async {
+    await FireStoreGroups()
+        .groupCollectionRef
+        .doc(group.groupID)
+        .collection("messages")
+        .doc(message.messageId.toString())
+        .set(message.toJson());
     print("Message Send done Congratulations");
   }
 
- Stream<QuerySnapshot> getMessageFromGroupMessages(GroupModel group){
-   return FireStoreGroups().groupCollectionRef.doc(group.groupID)
-        .collection("messages").orderBy("messageId" , descending: false).snapshots();
-
+  Stream<QuerySnapshot> getMessageFromGroupMessages(GroupModel group) {
+    return FireStoreGroups()
+        .groupCollectionRef
+        .doc(group.groupID)
+        .collection("messages")
+        .orderBy("messageId", descending: false)
+        .snapshots();
   }
 
   showDialogForChoseImages(context) {
     Get.defaultDialog(
       title: "selectImage".tr,
       middleText: "chooseAway".tr,
-      middleTextStyle: TextStyle(
-          fontSize: 16.sp
-      ),
+      middleTextStyle: TextStyle(fontSize: 16.sp),
       titleStyle: TextStyle(fontSize: 20.sp),
       cancel: GestureDetector(
-        onTap: () async{
-          groupImage = File(await getImageFromGallery()) ;
+        onTap: () async {
+          groupImage = File(await getImageFromGallery());
           Navigator.pop(context);
           update();
-
         },
         child: Container(
           padding: EdgeInsets.all(10),
@@ -122,8 +128,8 @@ class GroupViewModel extends GetxController {
         ),
       ),
       confirm: GestureDetector(
-        onTap: ()async{
-          groupImage = File(await getImageFromCamera()) ;
+        onTap: () async {
+          groupImage = File(await getImageFromCamera());
           Navigator.pop(context);
           update();
         },
@@ -143,55 +149,36 @@ class GroupViewModel extends GetxController {
   Future<void> uploadImage() async {
     try {
       FirebaseStorage firebaseStorage =
-      FirebaseStorage(storageBucket: 'gs://teamat-47704.appspot.com');
+          FirebaseStorage(storageBucket: 'gs://teamat-47704.appspot.com');
       StorageReference storageReference =
-      firebaseStorage.ref().child(p.basename(groupImage.path));
-      StorageUploadTask storageUploadTask = storageReference.putFile(groupImage);
+          firebaseStorage.ref().child(p.basename(groupImage.path));
+      StorageUploadTask storageUploadTask =
+          storageReference.putFile(groupImage);
       StorageTaskSnapshot snapshot = await storageUploadTask.onComplete;
       groupImageURL = await snapshot.ref.getDownloadURL();
       update();
       print("uploaded done");
-
     } catch (ex) {
       print(ex.message);
     }
   }
 
-  getGroupLocationLocation()async{
+  getGroupLocationLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    groupLatitude = position.latitude ;
-    groupLongitude = position.longitude ;
-    var address = await Geocoder.local.findAddressesFromCoordinates(Coordinates(groupLatitude , groupLongitude));
+    groupLatitude = position.latitude;
+    groupLongitude = position.longitude;
+    var address = await Geocoder.local.findAddressesFromCoordinates(
+        Coordinates(groupLatitude, groupLongitude));
     update();
   }
 
-  joinToGroup(GroupModel groupModel)async{
+  joinToGroup(GroupModel groupModel) async {
     List<dynamic> requestList = groupModel.unConfirmedUsers;
     requestList.add(UserModel.currentUser.userID);
     print(requestList.length);
     GroupModel newGroup = GroupModel(
-      groupID: groupModel.groupID ,
-      groupPictureURL: groupModel.groupPictureURL,
-      groupName: groupModel.groupName,
-      groupLongitude: groupModel.groupLongitude,
-      groupLatitude: groupModel.groupLatitude,
-      groupDescription: groupModel.groupDescription,
-      confirmedUsers: groupModel.confirmedUsers,
-      admin: groupModel.admin,
-      unConfirmedUsers: requestList
-    );
-
-    await FireStoreGroups().groupCollectionRef.doc(groupModel.groupID).update(newGroup.toJson());
-    await getGroups();
-  }
-
-  cancelRequest(GroupModel groupModel)async{
-    List<dynamic> requestList = groupModel.unConfirmedUsers;
-    requestList.remove(UserModel.currentUser.userID);
-    print(requestList.length);
-    GroupModel newGroup = GroupModel(
-        groupID: groupModel.groupID ,
+        groupID: groupModel.groupID,
         groupPictureURL: groupModel.groupPictureURL,
         groupName: groupModel.groupName,
         groupLongitude: groupModel.groupLongitude,
@@ -199,21 +186,63 @@ class GroupViewModel extends GetxController {
         groupDescription: groupModel.groupDescription,
         confirmedUsers: groupModel.confirmedUsers,
         admin: groupModel.admin,
-        unConfirmedUsers: requestList
-    );
+        unConfirmedUsers: requestList);
 
-    await FireStoreGroups().groupCollectionRef.doc(groupModel.groupID).update(newGroup.toJson());
+    await FireStoreGroups()
+        .groupCollectionRef
+        .doc(groupModel.groupID)
+        .update(newGroup.toJson());
     await getGroups();
   }
 
-  acceptRequest(GroupModel groupModel , String userID)async{
+  editGroup(GroupModel updatedGroup) async{
+    GroupModel newGroup = GroupModel(
+        groupID: updatedGroup.groupID,
+        groupPictureURL: updatedGroup.groupPictureURL,
+        groupName: updatedGroup.groupName,
+        groupLongitude: updatedGroup.groupLongitude,
+        groupLatitude: updatedGroup.groupLatitude,
+        groupDescription: updatedGroup.groupDescription,
+        confirmedUsers: updatedGroup.confirmedUsers,
+        admin: updatedGroup.admin,
+        unConfirmedUsers: updatedGroup.unConfirmedUsers);
+
+    await FireStoreGroups()
+        .groupCollectionRef
+        .doc(updatedGroup.groupID)
+        .update(newGroup.toJson());
+  }
+
+  cancelRequest(GroupModel groupModel) async {
     List<dynamic> requestList = groupModel.unConfirmedUsers;
-    List<dynamic> acceptList = groupModel.confirmedUsers ;
+    requestList.remove(UserModel.currentUser.userID);
+    print(requestList.length);
+    GroupModel newGroup = GroupModel(
+        groupID: groupModel.groupID,
+        groupPictureURL: groupModel.groupPictureURL,
+        groupName: groupModel.groupName,
+        groupLongitude: groupModel.groupLongitude,
+        groupLatitude: groupModel.groupLatitude,
+        groupDescription: groupModel.groupDescription,
+        confirmedUsers: groupModel.confirmedUsers,
+        admin: groupModel.admin,
+        unConfirmedUsers: requestList);
+
+    await FireStoreGroups()
+        .groupCollectionRef
+        .doc(groupModel.groupID)
+        .update(newGroup.toJson());
+    await getGroups();
+  }
+
+  acceptRequest(GroupModel groupModel, String userID) async {
+    List<dynamic> requestList = groupModel.unConfirmedUsers;
+    List<dynamic> acceptList = groupModel.confirmedUsers;
     requestList.remove(userID);
     print(requestList.length);
     acceptList.add(userID);
     GroupModel newGroup = GroupModel(
-        groupID: groupModel.groupID ,
+        groupID: groupModel.groupID,
         groupPictureURL: groupModel.groupPictureURL,
         groupName: groupModel.groupName,
         groupLongitude: groupModel.groupLongitude,
@@ -221,19 +250,21 @@ class GroupViewModel extends GetxController {
         groupDescription: groupModel.groupDescription,
         confirmedUsers: acceptList,
         admin: groupModel.admin,
-        unConfirmedUsers: requestList
-    );
+        unConfirmedUsers: requestList);
 
-    await FireStoreGroups().groupCollectionRef.doc(groupModel.groupID).update(newGroup.toJson());
+    await FireStoreGroups()
+        .groupCollectionRef
+        .doc(groupModel.groupID)
+        .update(newGroup.toJson());
     await getGroups();
   }
 
-  refuseRequest(GroupModel groupModel, String userID)async{
+  refuseRequest(GroupModel groupModel, String userID) async {
     List<dynamic> requestList = groupModel.unConfirmedUsers;
     requestList.remove(userID);
     print(requestList.length);
     GroupModel newGroup = GroupModel(
-        groupID: groupModel.groupID ,
+        groupID: groupModel.groupID,
         groupPictureURL: groupModel.groupPictureURL,
         groupName: groupModel.groupName,
         groupLongitude: groupModel.groupLongitude,
@@ -241,19 +272,21 @@ class GroupViewModel extends GetxController {
         groupDescription: groupModel.groupDescription,
         confirmedUsers: groupModel.confirmedUsers,
         admin: groupModel.admin,
-        unConfirmedUsers: requestList
-    );
+        unConfirmedUsers: requestList);
 
-    await FireStoreGroups().groupCollectionRef.doc(groupModel.groupID).update(newGroup.toJson());
+    await FireStoreGroups()
+        .groupCollectionRef
+        .doc(groupModel.groupID)
+        .update(newGroup.toJson());
     await getGroups();
   }
 
-  leaveGroup(GroupModel groupModel)async{
+  leaveGroup(GroupModel groupModel) async {
     List<dynamic> requestList = groupModel.confirmedUsers;
     requestList.remove(UserModel.currentUser.userID);
     print(requestList.length);
     GroupModel newGroup = GroupModel(
-        groupID: groupModel.groupID ,
+        groupID: groupModel.groupID,
         groupPictureURL: groupModel.groupPictureURL,
         groupName: groupModel.groupName,
         groupLongitude: groupModel.groupLongitude,
@@ -261,30 +294,29 @@ class GroupViewModel extends GetxController {
         groupDescription: groupModel.groupDescription,
         confirmedUsers: groupModel.confirmedUsers,
         admin: groupModel.admin,
-        unConfirmedUsers: requestList
-    );
+        unConfirmedUsers: requestList);
 
-    await FireStoreGroups().groupCollectionRef.doc(groupModel.groupID).update(newGroup.toJson());
+    await FireStoreGroups()
+        .groupCollectionRef
+        .doc(groupModel.groupID)
+        .update(newGroup.toJson());
     await getGroups();
   }
 
-  getAllUser() async  {
-    await FirebaseFirestore.instance.collection("Users").get().then((value){
-       for(var doc in value.docs){
-         allUsers.add(UserModel.fromJson(doc.data()));
-       }
+  getAllUser() async {
+    await FirebaseFirestore.instance.collection("Users").get().then((value) {
+      for (var doc in value.docs) {
+        allUsers.add(UserModel.fromJson(doc.data()));
+      }
     });
     update();
   }
 
-  UserModel getUser (String userId) {
-    UserModel userData ;
-    for(var user in allUsers){
-      if(user.userID == userId)
-        userData = user;
+  UserModel getUser(String userId) {
+    UserModel userData;
+    for (var user in allUsers) {
+      if (user.userID == userId) userData = user;
     }
-    return userData ;
-}
-
-
+    return userData;
+  }
 }

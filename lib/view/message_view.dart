@@ -9,7 +9,6 @@ import 'package:team_at/model/user_model.dart';
 import 'package:team_at/viewModel/group_view_model.dart';
 import 'package:team_at/widget/custom_text.dart';
 
-
 class MessageView extends StatelessWidget {
   final GroupModel group;
 
@@ -67,7 +66,8 @@ class MessageView extends StatelessWidget {
                       builder: (context, snapShot) {
                         if (snapShot.hasData) {
                           groupMessages.clear();
-                          scrollController.jumpTo(scrollController.position.maxScrollExtent+50);
+                          scrollController.jumpTo(
+                              scrollController.position.maxScrollExtent + 50);
                           for (var doc in snapShot.data.docs) {
                             var data = doc.data();
                             groupMessages.add(MessageModel.fromJson(data));
@@ -85,28 +85,35 @@ class MessageView extends StatelessWidget {
                                     ? TextDirection.ltr
                                     : TextDirection.rtl,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
                                   child: Row(
                                     children: [
                                       CircleAvatar(
                                         radius: 16.w,
-                                        backgroundImage: NetworkImage(postController
-                                            .getUser(groupMessages[index].senderId)
-                                            .picURL),
+                                        backgroundImage: NetworkImage(
+                                            postController
+                                                .getUser(groupMessages[index]
+                                                    .senderId)
+                                                .picURL),
                                       ),
-                                      SizedBox(width: 10.w,),
+                                      SizedBox(
+                                        width: 10.w,
+                                      ),
                                       ConstrainedBox(
                                         constraints: BoxConstraints(
                                             minWidth: 0.w, maxWidth: 200.w),
                                         child: Container(
-                                          padding:
-                                              EdgeInsets.symmetric(horizontal: 5),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5),
                                           decoration: BoxDecoration(
-                                            color: groupMessages[index].senderId ==
+                                            color: groupMessages[index]
+                                                        .senderId ==
                                                     UserModel.currentUser.userID
                                                 ? Colors.green
                                                 : Colors.grey.shade300,
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
                                           ),
                                           child: Text(
                                             groupMessages[index].messageContent,

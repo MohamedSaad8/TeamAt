@@ -15,11 +15,11 @@ class WelcomeView  extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(height: 131.h,),
-          Image.asset("assets/images/welcom.png" , width: 375.sw, height: 260.h,),
+          Image.asset("assets/images/welcome1.png" , width: 375.sw, height: 260.h,),
           SizedBox(height: 48.h,),
           Container(
             width: size.width,
-            height:77.h ,
+            height:85.h ,
             child: Column(
               children: [
                 CustomText(
@@ -38,7 +38,7 @@ class WelcomeView  extends StatelessWidget {
           SizedBox(height: 24.h,),
           Container(
             width: size.width,
-            height:60.h ,
+            height:70.h ,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -56,7 +56,7 @@ class WelcomeView  extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 83.h,),
+          SizedBox(height: 60.h,),
           Padding(
            padding: const EdgeInsets.symmetric(horizontal: 15),
            child: CustomButton(

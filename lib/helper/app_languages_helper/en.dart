@@ -98,7 +98,9 @@ const Map<String , String> en = {
  "Camera" :"Camera" ,
  "Photos" : "Photos" ,
  "Select Group" : "Select Group" ,
- "noPosts" : "No Posts to view it"
+ "noPosts" : "No Posts to view it",
+ "Please select Image" : "Please Enter all Data",
+ "Image Error" : "Error in Request" ,
 
 
 

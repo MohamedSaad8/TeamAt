@@ -13,9 +13,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 class OTPVerification extends StatefulWidget {
   String phoneNumber ;
   String verificationCode ;
+  String countryCode ;
 
 
-  OTPVerification({@required this.phoneNumber});
+  OTPVerification({@required this.phoneNumber , this.countryCode});
 
   @override
   _OTPVerificationState createState() => _OTPVerificationState();
@@ -33,11 +34,7 @@ class _OTPVerificationState extends State<OTPVerification> {
     final _pinPutFocusNode = FocusNode();
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
+
       backgroundColor: Colors.white,
       body: GetBuilder<AuthViewModel>(
         init : AuthViewModel() ,
@@ -45,6 +42,18 @@ class _OTPVerificationState extends State<OTPVerification> {
 
           return Column(
             children: [
+              SizedBox(height: 50.h,),
+              Container(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back_ios_outlined , color: Colors.black,),
+                  onPressed: (){
+                    controller.phone = widget.countryCode ;
+                    Get.back();
+
+                  },
+                ),
+              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 height: 85.h,
@@ -106,7 +115,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                     pinAnimationType: PinAnimationType.fade,
                     onSubmit: (pin) async{
 
-                      if("222222" == pin)
+                      if(pin == widget.verificationCode)
                       {
                         Get.to(() => CompleteUserInfo());
                       }

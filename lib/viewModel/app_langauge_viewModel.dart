@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:team_at/helper/local_storage_helper/language_local_storage.dart';
 
 class AppLanguageViewModel extends GetxController {
-  var currentAppLanguage = "ar" ;
+  var currentAppLanguage = "en" ;
 
   @override
   void onInit() async {
@@ -11,7 +11,7 @@ class AppLanguageViewModel extends GetxController {
      LanguageLocalStorage languageLocalStorage = LanguageLocalStorage();
 
     currentAppLanguage = (await languageLocalStorage.selectedLanguage) == null
-        ? "ar"
+        ? "en"
         :await languageLocalStorage.selectedLanguage;
     Get.updateLocale(Locale(currentAppLanguage));
     update();

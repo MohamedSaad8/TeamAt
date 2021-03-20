@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddPhoneNumber extends StatelessWidget {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  String countryCode ;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,7 @@ class AddPhoneNumber extends StatelessWidget {
           if(_key.currentState.validate())
           {
             _key.currentState.save();
-            Get.to(() => OTPVerification(phoneNumber: controller.phone,));
+            Get.to(() => OTPVerification(phoneNumber: controller.phone, countryCode: countryCode,));
           }
 
         },
@@ -93,16 +94,18 @@ class AddPhoneNumber extends StatelessWidget {
               return  "phoneEmpty".tr ;
           },
           decoration: InputDecoration(
-            hintText: "0123456789",
+            hintText: "123456789",
             prefixIcon: CountryCodePicker(
               initialSelection: 'EG',
               favorite: ["+20", "EG"],
               showFlag: true,
               onChanged: (code) {
                 controller.phone = code.toString() ;
+                countryCode = code.toString();
               },
               onInit: (code){
                 controller.phone = code.toString() ;
+                countryCode = code.toString();
                 print(controller.phone);
               },
 

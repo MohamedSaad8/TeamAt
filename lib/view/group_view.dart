@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:team_at/model/group_model.dart';
+import 'package:team_at/model/post_model.dart';
 import 'package:team_at/model/user_model.dart';
 import 'package:team_at/view/message_view.dart';
 import 'package:team_at/viewModel/group_view_model.dart';
@@ -12,9 +14,11 @@ import 'package:team_at/view/accept_refuse_view.dart';
 import 'package:team_at/viewModel/posts_view_model.dart';
 import 'package:team_at/view/create_post_view.dart';
 import 'package:team_at/view/comment_view.dart';
+import 'package:team_at/view/edit_group_view.dart';
 
 class GroupView extends StatelessWidget {
   final GroupModel thisGroup;
+  List<PostModel> groupPosts = [];
 
   GroupView({this.thisGroup});
 
@@ -32,10 +36,24 @@ class GroupView extends StatelessWidget {
             Expanded(
               child: GetBuilder<PostsViewModel>(
                 init: PostsViewModel(),
-                builder: (postController) => postController
-                            .groupPosts.isNotEmpty &&
-                        postController.groupPosts.length > 0
-                    ? ListView.builder(
+                builder: (postController) {
+                  return StreamBuilder<QuerySnapshot>(
+                    stream:postController.getGroupPosts() ,
+                    builder: (context , snapShot){
+                      groupPosts.clear();
+                      try{
+                        for (var doc in snapShot.data.docs) {
+                          var data = doc.data();
+                          if (data["groupId"] == thisGroup.groupID) {
+                            groupPosts.add(PostModel.fromJson(data));
+                          }
+                        }
+                      }catch(e){
+                        groupPosts = [];
+                      }
+                      return groupPosts.isNotEmpty &&
+                          groupPosts.length > 0
+                          ? ListView.builder(
                         itemBuilder: (context, index) {
                           if (index == 0) {
                             return Column(
@@ -68,7 +86,7 @@ class GroupView extends StatelessWidget {
                                         padding: EdgeInsets.only(top: 25.h),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                           children: [
                                             IconButton(
                                               icon: Icon(
@@ -77,27 +95,34 @@ class GroupView extends StatelessWidget {
                                               ),
                                               onPressed: () {
                                                 Get.back();
+                                                Get.back();
+                                                Get.back();
+                                                Get.back();
+                                                Get.back();
+                                                Get.back();
+                                                Get.back();
+                                                Get.back();
                                               },
                                             ),
                                             IconButton(
                                               icon: thisGroup.admin ==
-                                                      UserModel
-                                                          .currentUser.userID
+                                                  UserModel
+                                                      .currentUser.userID
                                                   ? Icon(
-                                                      Icons.more_vert_outlined,
-                                                      color: Colors.white,
-                                                    )
+                                                Icons.more_vert_outlined,
+                                                color: Colors.white,
+                                              )
                                                   : Container(),
                                               onPressed: thisGroup.admin ==
-                                                      UserModel
-                                                          .currentUser.userID
+                                                  UserModel
+                                                      .currentUser.userID
                                                   ? () {
-                                                      Get.to(
-                                                        () => AcceptRefuseView(
-                                                          thisGroup: thisGroup,
-                                                        ),
-                                                      );
-                                                    }
+                                                Get.to(
+                                                      () => AcceptRefuseView(
+                                                    thisGroup: thisGroup,
+                                                  ),
+                                                );
+                                              }
                                                   : null,
                                             ),
                                           ],
@@ -108,39 +133,44 @@ class GroupView extends StatelessWidget {
                                         right: 16.w,
                                         child: CustomButton(
                                           text: thisGroup.admin ==
-                                                  UserModel.currentUser.userID
+                                              UserModel.currentUser.userID
                                               ? "Edit group".tr
                                               : thisGroup.confirmedUsers
-                                                      .contains(UserModel
-                                                          .currentUser.userID)
-                                                  ? "Leave Group".tr
-                                                  : thisGroup.unConfirmedUsers
-                                                          .contains(UserModel
-                                                              .currentUser
-                                                              .userID)
-                                                      ? "cancel request".tr
-                                                      : "Join Group".tr,
+                                              .contains(UserModel
+                                              .currentUser.userID)
+                                              ? "Leave Group".tr
+                                              : thisGroup.unConfirmedUsers
+                                              .contains(UserModel
+                                              .currentUser
+                                              .userID)
+                                              ? "cancel request".tr
+                                              : "Join Group".tr,
                                           buttonFontSize: 14.sp,
                                           buttonHeight: 40.h,
                                           buttonWidth: 104.w,
                                           buttonRadius: 6,
                                           onClick: () async {
-                                            if (thisGroup.unConfirmedUsers
-                                                    .contains(UserModel
-                                                        .currentUser.userID) ==
+                                            if(thisGroup.admin ==
+                                                UserModel.currentUser.userID){
+                                              Get.to(() => EditGroupView(thisGroup));
+                                            }
+
+                                            else if (thisGroup.unConfirmedUsers
+                                                .contains(UserModel
+                                                .currentUser.userID) ==
                                                 true) {
                                               await controller
                                                   .cancelRequest(thisGroup);
                                             } else if (thisGroup
-                                                        .unConfirmedUsers
-                                                        .contains(UserModel
-                                                            .currentUser
-                                                            .userID) ==
-                                                    false &&
+                                                .unConfirmedUsers
+                                                .contains(UserModel
+                                                .currentUser
+                                                .userID) ==
+                                                false &&
                                                 thisGroup.confirmedUsers
-                                                        .contains(UserModel
-                                                            .currentUser
-                                                            .userID) ==
+                                                    .contains(UserModel
+                                                    .currentUser
+                                                    .userID) ==
                                                     false &&
                                                 thisGroup.admin !=
                                                     UserModel
@@ -148,14 +178,14 @@ class GroupView extends StatelessWidget {
                                               await controller
                                                   .joinToGroup(thisGroup);
                                             } else if (thisGroup
-                                                        .unConfirmedUsers
-                                                        .contains(UserModel
-                                                            .currentUser
-                                                            .userID) ==
-                                                    false &&
+                                                .unConfirmedUsers
+                                                .contains(UserModel
+                                                .currentUser
+                                                .userID) ==
+                                                false &&
                                                 thisGroup.confirmedUsers
                                                     .contains(UserModel
-                                                        .currentUser.userID) &&
+                                                    .currentUser.userID) &&
                                                 thisGroup.admin !=
                                                     UserModel
                                                         .currentUser.userID) {
@@ -239,9 +269,9 @@ class GroupView extends StatelessWidget {
                             ),
                           );
                         },
-                        itemCount: postController.groupPosts.length + 1,
+                        itemCount: groupPosts.length + 1,
                       )
-                    : Column(
+                          : Column(
                         children: [
                           Container(
                             width: size.width,
@@ -271,7 +301,7 @@ class GroupView extends StatelessWidget {
                                   padding: EdgeInsets.only(top: 25.h),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       IconButton(
                                         icon: Icon(
@@ -284,21 +314,21 @@ class GroupView extends StatelessWidget {
                                       ),
                                       IconButton(
                                         icon: thisGroup.admin ==
-                                                UserModel.currentUser.userID
+                                            UserModel.currentUser.userID
                                             ? Icon(
-                                                Icons.more_vert_outlined,
-                                                color: Colors.white,
-                                              )
+                                          Icons.more_vert_outlined,
+                                          color: Colors.white,
+                                        )
                                             : Container(),
                                         onPressed: thisGroup.admin ==
-                                                UserModel.currentUser.userID
+                                            UserModel.currentUser.userID
                                             ? () {
-                                                Get.to(
-                                                  () => AcceptRefuseView(
-                                                    thisGroup: thisGroup,
-                                                  ),
-                                                );
-                                              }
+                                          Get.to(
+                                                () => AcceptRefuseView(
+                                              thisGroup: thisGroup,
+                                            ),
+                                          );
+                                        }
                                             : null,
                                       ),
                                     ],
@@ -309,41 +339,41 @@ class GroupView extends StatelessWidget {
                                   right: 16.w,
                                   child: CustomButton(
                                     text: thisGroup.admin ==
-                                            UserModel.currentUser.userID
+                                        UserModel.currentUser.userID
                                         ? "Edit group".tr
                                         : thisGroup.confirmedUsers.contains(
-                                                UserModel.currentUser.userID)
-                                            ? "Leave Group".tr
-                                            : thisGroup.unConfirmedUsers
-                                                    .contains(UserModel
-                                                        .currentUser.userID)
-                                                ? "cancel request".tr
-                                                : "Join Group".tr,
+                                        UserModel.currentUser.userID)
+                                        ? "Leave Group".tr
+                                        : thisGroup.unConfirmedUsers
+                                        .contains(UserModel
+                                        .currentUser.userID)
+                                        ? "cancel request".tr
+                                        : "Join Group".tr,
                                     buttonFontSize: 14.sp,
                                     buttonHeight: 40.h,
                                     buttonWidth: 104.w,
                                     buttonRadius: 6,
                                     onClick: () async {
                                       if (thisGroup.unConfirmedUsers.contains(
-                                              UserModel.currentUser.userID) ==
+                                          UserModel.currentUser.userID) ==
                                           true) {
                                         await controller
                                             .cancelRequest(thisGroup);
                                       } else if (thisGroup.unConfirmedUsers
-                                                  .contains(UserModel
-                                                      .currentUser.userID) ==
-                                              false &&
+                                          .contains(UserModel
+                                          .currentUser.userID) ==
+                                          false &&
                                           thisGroup.confirmedUsers.contains(
-                                                  UserModel
-                                                      .currentUser.userID) ==
+                                              UserModel
+                                                  .currentUser.userID) ==
                                               false &&
                                           thisGroup.admin !=
                                               UserModel.currentUser.userID) {
                                         await controller.joinToGroup(thisGroup);
                                       } else if (thisGroup.unConfirmedUsers
-                                                  .contains(UserModel
-                                                      .currentUser.userID) ==
-                                              false &&
+                                          .contains(UserModel
+                                          .currentUser.userID) ==
+                                          false &&
                                           thisGroup.confirmedUsers.contains(
                                               UserModel.currentUser.userID) &&
                                           thisGroup.admin !=
@@ -386,9 +416,13 @@ class GroupView extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               fontSize: 18.sp,
                             ),
-                          ))
+                          ),
+                          )
                         ],
-                      ),
+                      );
+                    },
+                  );
+                }
               ),
             )
           ],
@@ -403,7 +437,7 @@ class GroupView extends StatelessWidget {
       child: Row(
         children: [
           CustomText(
-            text: postController.groupPosts[index].likes.length.toString() +
+            text: groupPosts[index].likes.length.toString() +
                 " Likes",
             fontSize: 14,
             fontColor: Colors.grey,
@@ -412,8 +446,8 @@ class GroupView extends StatelessWidget {
             width: 8.w,
           ),
           CustomText(
-            text: (postController.groupPosts[index].comments != null)
-                ? postController.groupPosts[index].comments.length.toString() +
+            text: (groupPosts[index].comments != null)
+                ? groupPosts[index].comments.length.toString() +
                     " Comments"
                 : "0 Comments",
             fontSize: 14,
@@ -431,12 +465,12 @@ class GroupView extends StatelessWidget {
           onTap: () async {
             if (thisGroup.confirmedUsers
                 .contains(UserModel.currentUser.userID)) {
-              if (postController.groupPosts[index].likes
+              if (groupPosts[index].likes
                   .contains(UserModel.currentUser.userID)) {
-                postController.removeLike(postController.groupPosts[index]);
+                postController.removeLike(groupPosts[index]);
                 await postController.getAllPostsByUserId();
               } else {
-                postController.addLike(postController.groupPosts[index]);
+                postController.addLike(groupPosts[index]);
                 await postController.getAllPostsByUserId();
               }
             } else {
@@ -449,7 +483,7 @@ class GroupView extends StatelessWidget {
           child: Icon(
             Icons.favorite_border_outlined,
             size: 30.w,
-            color: postController.groupPosts[index].likes
+            color: groupPosts[index].likes
                     .contains(UserModel.currentUser.userID)
                 ? Colors.red
                 : Colors.black,
@@ -460,13 +494,24 @@ class GroupView extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () async {
-            await postController.getPostCommentsFromFireStore(
-                postController.groupPosts[index].postId);
-            Get.to(() => CommentView(
+            if(thisGroup.confirmedUsers
+                .contains(UserModel.currentUser.userID))
+              {
+                await postController.getPostCommentsFromFireStore(
+                    groupPosts[index].postId);
+                Get.to(() => CommentView(
                   thisGroup: thisGroup,
-                  thePost: postController.groupPosts[index],
-                  postId: postController.groupPosts[index].postId,
+                  thePost: groupPosts[index],
+                  postId: groupPosts[index].postId,
                 ));
+              }
+            else
+              {
+                Get.defaultDialog(
+                    radius: 12,
+                    title: "Request Not Valid".tr,
+                    middleText: "Please join to the group".tr);
+              }
           },
           child: Container(
             child: Image(
@@ -483,10 +528,10 @@ class GroupView extends StatelessWidget {
   ConstrainedBox postImage(PostsViewModel postController, int index) {
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: 10.h, minWidth: 370.w),
-      child: postController.groupPosts[index].postImageURL != null
+      child: groupPosts[index].postImageURL != null
           ? Image(
               image:
-                  NetworkImage(postController.groupPosts[index].postImageURL))
+                  NetworkImage(groupPosts[index].postImageURL))
           : Container(),
     );
   }
@@ -494,11 +539,11 @@ class GroupView extends StatelessWidget {
   LayoutBuilder postContent(PostsViewModel postController, int index) {
     return LayoutBuilder(
       builder: (context, constrain) {
-        if (postController.groupPosts[index].postContent != "") {
+        if (groupPosts[index].postContent != "") {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             child: CustomText(
-              text: postController.groupPosts[index].postContent,
+              text: groupPosts[index].postContent,
               textAlignment: Alignment.centerLeft,
               fontSize: 16.sp,
             ),
@@ -509,49 +554,57 @@ class GroupView extends StatelessWidget {
     );
   }
 
-  Row postUserInfo(
+  Widget postUserInfo(
       GroupViewModel controller, PostsViewModel postController, int index) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundImage: NetworkImage(controller
-                  .getUser(postController.groupPosts[index].userId)
-                  .picURL),
-            ),
-            SizedBox(
-              width: 8.w,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomText(
-                  text: thisGroup.groupName,
-                  fontSize: 14.sp,
-                ),
-                CustomText(
-                  text: controller
-                      .getUser(postController.groupPosts[index].userId)
-                      .userName,
-                  fontSize: 14.sp,
-                  fontColor: Colors.grey,
-                ),
-              ],
-            )
-          ],
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.more_vert_outlined,
-            color: Colors.grey,
+
+    try{
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 16,
+                backgroundImage: NetworkImage(controller
+                    .getUser(groupPosts[index].userId)
+                    .picURL),
+              ),
+              SizedBox(
+                width: 8.w,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomText(
+                    text: thisGroup.groupName,
+                    fontSize: 14.sp,
+                  ),
+                  CustomText(
+                    text: controller
+                        .getUser(groupPosts[index].userId)
+                        .userName,
+                    fontSize: 14.sp,
+                    fontColor: Colors.grey,
+                  ),
+                ],
+              )
+            ],
           ),
-          onPressed: () {},
-        )
-      ],
-    );
+          IconButton(
+            icon: Icon(
+              Icons.more_vert_outlined,
+              color: Colors.grey,
+            ),
+            onPressed: () {},
+          )
+        ],
+      );
+    }
+    catch(e)
+    {
+      return CircularProgressIndicator();
+    }
+
   }
 
   Padding buildGroupAboutSection() {

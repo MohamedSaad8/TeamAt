@@ -15,11 +15,11 @@ import 'package:uuid/uuid.dart';
 class CreatePostView extends StatelessWidget {
   final String groupId;
   final String groupAdminId;
-  final GroupModel thisGroup ;
+  final GroupModel thisGroup;
 
-  final _controller =TextEditingController();
+  final _controller = TextEditingController();
 
-  CreatePostView({this.groupId, this.groupAdminId , this.thisGroup});
+  CreatePostView({this.groupId, this.groupAdminId, this.thisGroup});
 
   GlobalKey<FormState> _key = GlobalKey<FormState>();
 
@@ -30,7 +30,7 @@ class CreatePostView extends StatelessWidget {
       body: GetBuilder<PostsViewModel>(
         init: PostsViewModel(),
         builder: (controller) => ModalProgressHUD(
-          inAsyncCall:  controller.isLoading,
+          inAsyncCall: controller.isLoading,
           child: Form(
             key: _key,
             child: Column(
@@ -70,32 +70,34 @@ class CreatePostView extends StatelessWidget {
                         buttonHeight: 32.h,
                         buttonFontSize: 14,
                         onClick: () async {
-                          controller.changeIsLoading(true);
-                          if (controller.postImage != null) {
-                            await controller.uploadImage();
-                          }
                           _key.currentState.save();
-                          await controller.createPost(
-                              PostModel(
-                                groupId: groupId,
-                                likes: [],
-                                comments: [],
-                                postContent: controller.postContent,
-                                postImageURL: controller.postImageURL,
-                                userId: UserModel.currentUser.userID,
-                                postId: Uuid().v4(),
-                              ),
-
-                              groupId);
-                          controller.changeIsLoading(false);
-                          _controller.clear();
-                          controller.setImageEqualNull();
-                          await controller.getAllPostsByUserId();
-                          await controller.getAllFollowingGroupsPostsByUserId();
-                          Get.to(()=> GroupView(
-                            thisGroup: thisGroup,
-
-                          ));
+                          if (controller.postImage == null &&
+                              controller.postContent == "") {
+                            Get.snackbar("postError", "Set A Post At First",
+                                snackPosition: SnackPosition.BOTTOM);
+                          } else {
+                            controller.changeIsLoading(true);
+                            if (controller.postImage != null) {
+                              await controller.uploadImage();
+                            }
+                            await controller.createPost(
+                                PostModel(
+                                  groupId: groupId,
+                                  likes: [],
+                                  comments: [],
+                                  postContent: controller.postContent,
+                                  postImageURL: controller.postImageURL,
+                                  userId: UserModel.currentUser.userID,
+                                  postId: Uuid().v4(),
+                                ),
+                                groupId);
+                            controller.changeIsLoading(false);
+                            _controller.clear();
+                            controller.setImageEqualNull();
+                            Get.to(() => GroupView(
+                                  thisGroup: thisGroup,
+                                ));
+                          }
                         },
                       ),
                     )

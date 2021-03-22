@@ -25,10 +25,17 @@ class CurrentLocationView extends StatelessWidget {
           inAsyncCall: controller.isLoading,
           child: Column(
             children: [
-              Image.asset(
-                "assets/images/location.png",
-                width: 128.w,
-                height: 216.h,
+              InkWell(
+                onTap: ()async{
+                  controller.changeIsLoading(true);
+                  await controller.getUserLocation();
+                  controller.changeIsLoading(false) ;
+                },
+                child: Image.asset(
+                  "assets/images/location.png",
+                  width: 128.w,
+                  height: 216.h,
+                ),
               ),
               SizedBox(
                 height: 24.h,

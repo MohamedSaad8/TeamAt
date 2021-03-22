@@ -35,395 +35,446 @@ class GroupView extends StatelessWidget {
           children: [
             Expanded(
               child: GetBuilder<PostsViewModel>(
-                init: PostsViewModel(),
-                builder: (postController) {
-                  return StreamBuilder<QuerySnapshot>(
-                    stream:postController.getGroupPosts() ,
-                    builder: (context , snapShot){
-                      groupPosts.clear();
-                      try{
-                        for (var doc in snapShot.data.docs) {
-                          var data = doc.data();
-                          if (data["groupId"] == thisGroup.groupID) {
-                            groupPosts.add(PostModel.fromJson(data));
+                  init: PostsViewModel(),
+                  builder: (postController) {
+                    return StreamBuilder<QuerySnapshot>(
+                      stream: postController.getGroupPosts(),
+                      builder: (context, snapShot) {
+                        groupPosts.clear();
+                        try {
+                          for (var doc in snapShot.data.docs) {
+                            var data = doc.data();
+                            if (data["groupId"] == thisGroup.groupID) {
+                              groupPosts.add(PostModel.fromJson(data));
+                            }
                           }
+                        } catch (e) {
+                          groupPosts = [];
                         }
-                      }catch(e){
-                        groupPosts = [];
-                      }
-                      return groupPosts.isNotEmpty &&
-                          groupPosts.length > 0
-                          ? ListView.builder(
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return Column(
-                              children: [
-                                Container(
-                                  width: size.width,
-                                  height: 240.h,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(
-                                        thisGroup.groupPictureURL,
+                        return groupPosts.isNotEmpty && groupPosts.length > 0
+                            ? ListView.builder(
+                                itemBuilder: (context, index) {
+                                  if (index == 0) {
+                                    return Column(
+                                      children: [
+                                        Container(
+                                          width: size.width,
+                                          height: 240.h,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                thisGroup.groupPictureURL,
+                                              ),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          child: Stack(
+                                            children: [
+                                              Positioned(
+                                                child: CustomText(
+                                                  text: thisGroup.groupName,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontColor: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                                top: 180.h,
+                                                bottom: 35.h,
+                                                left: 16.h,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 25.h),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    IconButton(
+                                                      icon: Icon(
+                                                        Icons
+                                                            .arrow_back_ios_outlined,
+                                                        color: Colors.white,
+                                                      ),
+                                                      onPressed: () {
+                                                        Get.back();
+                                                        Get.back();
+                                                        Get.back();
+                                                        Get.back();
+                                                        Get.back();
+                                                        Get.back();
+                                                        Get.back();
+                                                        Get.back();
+                                                      },
+                                                    ),
+                                                    IconButton(
+                                                      icon: thisGroup.admin ==
+                                                              UserModel
+                                                                  .currentUser
+                                                                  .userID
+                                                          ? Icon(
+                                                              Icons
+                                                                  .more_vert_outlined,
+                                                              color:
+                                                                  Colors.white,
+                                                            )
+                                                          : Container(),
+                                                      onPressed: thisGroup
+                                                                  .admin ==
+                                                              UserModel
+                                                                  .currentUser
+                                                                  .userID
+                                                          ? () {
+                                                              Get.to(
+                                                                () =>
+                                                                    AcceptRefuseView(
+                                                                  thisGroup:
+                                                                      thisGroup,
+                                                                ),
+                                                              );
+                                                            }
+                                                          : null,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Positioned(
+                                                top: 180.h,
+                                                right: 16.w,
+                                                child: CustomButton(
+                                                  text: thisGroup.admin ==
+                                                          UserModel.currentUser
+                                                              .userID
+                                                      ? "Edit group".tr
+                                                      : thisGroup.confirmedUsers
+                                                              .contains(UserModel
+                                                                  .currentUser
+                                                                  .userID)
+                                                          ? "Leave Group".tr
+                                                          : thisGroup
+                                                                  .unConfirmedUsers
+                                                                  .contains(UserModel
+                                                                      .currentUser
+                                                                      .userID)
+                                                              ? "cancel request"
+                                                                  .tr
+                                                              : "Join Group".tr,
+                                                  buttonFontSize: 14.sp,
+                                                  buttonHeight: 40.h,
+                                                  buttonWidth: 104.w,
+                                                  buttonRadius: 6,
+                                                  onClick: () async {
+                                                    if (thisGroup.admin ==
+                                                        UserModel.currentUser
+                                                            .userID) {
+                                                      Get.to(() =>
+                                                          EditGroupView(
+                                                              thisGroup));
+                                                    } else if (thisGroup
+                                                            .unConfirmedUsers
+                                                            .contains(UserModel
+                                                                .currentUser
+                                                                .userID) ==
+                                                        true) {
+                                                      await controller
+                                                          .cancelRequest(
+                                                              thisGroup);
+                                                    } else if (thisGroup
+                                                                .unConfirmedUsers
+                                                                .contains(UserModel
+                                                                    .currentUser
+                                                                    .userID) ==
+                                                            false &&
+                                                        thisGroup.confirmedUsers
+                                                                .contains(UserModel
+                                                                    .currentUser
+                                                                    .userID) ==
+                                                            false &&
+                                                        thisGroup.admin !=
+                                                            UserModel
+                                                                .currentUser
+                                                                .userID) {
+                                                      await controller
+                                                          .joinToGroup(
+                                                              thisGroup);
+                                                    } else if (thisGroup
+                                                                .unConfirmedUsers
+                                                                .contains(UserModel
+                                                                    .currentUser
+                                                                    .userID) ==
+                                                            false &&
+                                                        thisGroup.confirmedUsers
+                                                            .contains(UserModel
+                                                                .currentUser
+                                                                .userID) &&
+                                                        thisGroup.admin !=
+                                                            UserModel
+                                                                .currentUser
+                                                                .userID) {
+                                                      await controller
+                                                          .leaveGroup(
+                                                              thisGroup);
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 16.h,
+                                        ),
+                                        groupActionButtons(
+                                            controller, thisGroup),
+                                        SizedBox(
+                                          height: 16.h,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
+                                          child: CustomText(
+                                            text: "About group".tr,
+                                            fontColor: Colors.black,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.bold,
+                                            textAlignment: Alignment.centerLeft,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        buildGroupAboutSection(),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15,
+                                        right: 15,
+                                        bottom: 12,
+                                        top: 0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color: Colors.grey.shade300,
+                                            width: 1),
+                                        borderRadius: BorderRadius.circular(6),
                                       ),
-                                      fit: BoxFit.cover,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            width: size.width,
+                                            height: 0,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: postUserInfo(controller,
+                                                postController, index - 1),
+                                          ),
+                                          postContent(
+                                              postController, index - 1),
+                                          postImage(postController, index - 1),
+                                          SizedBox(
+                                            height: 8.h,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: postButtonsAction(
+                                                postController, index - 1),
+                                          ),
+                                          SizedBox(
+                                            height: 8.h,
+                                          ),
+                                          postLikesAndCommentsInfo(
+                                              postController, index - 1),
+                                          SizedBox(
+                                            height: 8.h,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                itemCount: groupPosts.length + 1,
+                              )
+                            : Column(
+                                children: [
+                                  Container(
+                                    width: size.width,
+                                    height: 240.h,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                          thisGroup.groupPictureURL,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          child: CustomText(
+                                            text: thisGroup.groupName,
+                                            fontWeight: FontWeight.bold,
+                                            fontColor: Colors.white,
+                                            fontSize: 18.sp,
+                                          ),
+                                          top: 180.h,
+                                          bottom: 35.h,
+                                          left: 16.h,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 25.h),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              IconButton(
+                                                icon: Icon(
+                                                  Icons.arrow_back_ios_outlined,
+                                                  color: Colors.white,
+                                                ),
+                                                onPressed: () {
+                                                  Get.back();
+                                                },
+                                              ),
+                                              IconButton(
+                                                icon: thisGroup.admin ==
+                                                        UserModel
+                                                            .currentUser.userID
+                                                    ? Icon(
+                                                        Icons
+                                                            .more_vert_outlined,
+                                                        color: Colors.white,
+                                                      )
+                                                    : Container(),
+                                                onPressed: thisGroup.admin ==
+                                                        UserModel
+                                                            .currentUser.userID
+                                                    ? () {
+                                                        Get.to(
+                                                          () =>
+                                                              AcceptRefuseView(
+                                                            thisGroup:
+                                                                thisGroup,
+                                                          ),
+                                                        );
+                                                      }
+                                                    : null,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 180.h,
+                                          right: 16.w,
+                                          child: CustomButton(
+                                            text: thisGroup.admin ==
+                                                    UserModel.currentUser.userID
+                                                ? "Edit group".tr
+                                                : thisGroup.confirmedUsers
+                                                        .contains(UserModel
+                                                            .currentUser.userID)
+                                                    ? "Leave Group".tr
+                                                    : thisGroup.unConfirmedUsers
+                                                            .contains(UserModel
+                                                                .currentUser
+                                                                .userID)
+                                                        ? "cancel request".tr
+                                                        : "Join Group".tr,
+                                            buttonFontSize: 14.sp,
+                                            buttonHeight: 40.h,
+                                            buttonWidth: 104.w,
+                                            buttonRadius: 6,
+                                            onClick: () async {
+                                              if (thisGroup.unConfirmedUsers
+                                                      .contains(UserModel
+                                                          .currentUser
+                                                          .userID) ==
+                                                  true) {
+                                                await controller
+                                                    .cancelRequest(thisGroup);
+                                              } else if (thisGroup
+                                                          .unConfirmedUsers
+                                                          .contains(UserModel
+                                                              .currentUser
+                                                              .userID) ==
+                                                      false &&
+                                                  thisGroup.confirmedUsers
+                                                          .contains(UserModel
+                                                              .currentUser
+                                                              .userID) ==
+                                                      false &&
+                                                  thisGroup.admin !=
+                                                      UserModel
+                                                          .currentUser.userID) {
+                                                await controller
+                                                    .joinToGroup(thisGroup);
+                                              } else if (thisGroup
+                                                          .unConfirmedUsers
+                                                          .contains(UserModel
+                                                              .currentUser
+                                                              .userID) ==
+                                                      false &&
+                                                  thisGroup.confirmedUsers
+                                                      .contains(UserModel
+                                                          .currentUser
+                                                          .userID) &&
+                                                  thisGroup.admin !=
+                                                      UserModel
+                                                          .currentUser.userID) {
+                                                await controller
+                                                    .leaveGroup(thisGroup);
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        child: CustomText(
-                                          text: thisGroup.groupName,
-                                          fontWeight: FontWeight.bold,
-                                          fontColor: Colors.white,
-                                          fontSize: 18.sp,
-                                        ),
-                                        top: 180.h,
-                                        bottom: 35.h,
-                                        left: 16.h,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 25.h),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            IconButton(
-                                              icon: Icon(
-                                                Icons.arrow_back_ios_outlined,
-                                                color: Colors.white,
-                                              ),
-                                              onPressed: () {
-                                                Get.back();
-                                                Get.back();
-                                                Get.back();
-                                                Get.back();
-                                                Get.back();
-                                                Get.back();
-                                                Get.back();
-                                                Get.back();
-                                              },
-                                            ),
-                                            IconButton(
-                                              icon: thisGroup.admin ==
-                                                  UserModel
-                                                      .currentUser.userID
-                                                  ? Icon(
-                                                Icons.more_vert_outlined,
-                                                color: Colors.white,
-                                              )
-                                                  : Container(),
-                                              onPressed: thisGroup.admin ==
-                                                  UserModel
-                                                      .currentUser.userID
-                                                  ? () {
-                                                Get.to(
-                                                      () => AcceptRefuseView(
-                                                    thisGroup: thisGroup,
-                                                  ),
-                                                );
-                                              }
-                                                  : null,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 180.h,
-                                        right: 16.w,
-                                        child: CustomButton(
-                                          text: thisGroup.admin ==
-                                              UserModel.currentUser.userID
-                                              ? "Edit group".tr
-                                              : thisGroup.confirmedUsers
-                                              .contains(UserModel
-                                              .currentUser.userID)
-                                              ? "Leave Group".tr
-                                              : thisGroup.unConfirmedUsers
-                                              .contains(UserModel
-                                              .currentUser
-                                              .userID)
-                                              ? "cancel request".tr
-                                              : "Join Group".tr,
-                                          buttonFontSize: 14.sp,
-                                          buttonHeight: 40.h,
-                                          buttonWidth: 104.w,
-                                          buttonRadius: 6,
-                                          onClick: () async {
-                                            if(thisGroup.admin ==
-                                                UserModel.currentUser.userID){
-                                              Get.to(() => EditGroupView(thisGroup));
-                                            }
-
-                                            else if (thisGroup.unConfirmedUsers
-                                                .contains(UserModel
-                                                .currentUser.userID) ==
-                                                true) {
-                                              await controller
-                                                  .cancelRequest(thisGroup);
-                                            } else if (thisGroup
-                                                .unConfirmedUsers
-                                                .contains(UserModel
-                                                .currentUser
-                                                .userID) ==
-                                                false &&
-                                                thisGroup.confirmedUsers
-                                                    .contains(UserModel
-                                                    .currentUser
-                                                    .userID) ==
-                                                    false &&
-                                                thisGroup.admin !=
-                                                    UserModel
-                                                        .currentUser.userID) {
-                                              await controller
-                                                  .joinToGroup(thisGroup);
-                                            } else if (thisGroup
-                                                .unConfirmedUsers
-                                                .contains(UserModel
-                                                .currentUser
-                                                .userID) ==
-                                                false &&
-                                                thisGroup.confirmedUsers
-                                                    .contains(UserModel
-                                                    .currentUser.userID) &&
-                                                thisGroup.admin !=
-                                                    UserModel
-                                                        .currentUser.userID) {
-                                              await controller
-                                                  .leaveGroup(thisGroup);
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 16.h,
-                                ),
-                                groupActionButtons(controller, thisGroup),
-                                SizedBox(
-                                  height: 16.h,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 20),
-                                  child: CustomText(
-                                    text: "About group".tr,
-                                    fontColor: Colors.black,
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                    textAlignment: Alignment.centerLeft,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 8.h,
-                                ),
-                                buildGroupAboutSection(),
-                                SizedBox(
-                                  height: 8.h,
-                                ),
-                              ],
-                            );
-                          }
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 15, right: 15, bottom: 12, top: 0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: Colors.grey.shade300, width: 1),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Column(
-                                children: [
                                   SizedBox(
-                                    width: size.width,
-                                    height: 0,
+                                    height: 16.h,
+                                  ),
+                                  groupActionButtons(controller, thisGroup),
+                                  SizedBox(
+                                    height: 16.h,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: postUserInfo(
-                                        controller, postController, index - 1),
-                                  ),
-                                  postContent(postController, index - 1),
-                                  postImage(postController, index - 1),
-                                  SizedBox(
-                                    height: 8.h,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: postButtonsAction(
-                                        postController, index - 1),
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: CustomText(
+                                      text: "About group".tr,
+                                      fontColor: Colors.black,
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                      textAlignment: Alignment.centerLeft,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 8.h,
                                   ),
-                                  postLikesAndCommentsInfo(
-                                      postController, index - 1),
+                                  buildGroupAboutSection(),
                                   SizedBox(
                                     height: 8.h,
+                                  ),
+                                  Expanded(
+                                    child: Center(
+                                      child: CustomText(
+                                        text: "noPosts".tr,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.sp,
+                                      ),
+                                    ),
                                   )
                                 ],
-                              ),
-                            ),
-                          );
-                        },
-                        itemCount: groupPosts.length + 1,
-                      )
-                          : Column(
-                        children: [
-                          Container(
-                            width: size.width,
-                            height: 240.h,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  thisGroup.groupPictureURL,
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  child: CustomText(
-                                    text: thisGroup.groupName,
-                                    fontWeight: FontWeight.bold,
-                                    fontColor: Colors.white,
-                                    fontSize: 18.sp,
-                                  ),
-                                  top: 180.h,
-                                  bottom: 35.h,
-                                  left: 16.h,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 25.h),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.arrow_back_ios_outlined,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: thisGroup.admin ==
-                                            UserModel.currentUser.userID
-                                            ? Icon(
-                                          Icons.more_vert_outlined,
-                                          color: Colors.white,
-                                        )
-                                            : Container(),
-                                        onPressed: thisGroup.admin ==
-                                            UserModel.currentUser.userID
-                                            ? () {
-                                          Get.to(
-                                                () => AcceptRefuseView(
-                                              thisGroup: thisGroup,
-                                            ),
-                                          );
-                                        }
-                                            : null,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 180.h,
-                                  right: 16.w,
-                                  child: CustomButton(
-                                    text: thisGroup.admin ==
-                                        UserModel.currentUser.userID
-                                        ? "Edit group".tr
-                                        : thisGroup.confirmedUsers.contains(
-                                        UserModel.currentUser.userID)
-                                        ? "Leave Group".tr
-                                        : thisGroup.unConfirmedUsers
-                                        .contains(UserModel
-                                        .currentUser.userID)
-                                        ? "cancel request".tr
-                                        : "Join Group".tr,
-                                    buttonFontSize: 14.sp,
-                                    buttonHeight: 40.h,
-                                    buttonWidth: 104.w,
-                                    buttonRadius: 6,
-                                    onClick: () async {
-                                      if (thisGroup.unConfirmedUsers.contains(
-                                          UserModel.currentUser.userID) ==
-                                          true) {
-                                        await controller
-                                            .cancelRequest(thisGroup);
-                                      } else if (thisGroup.unConfirmedUsers
-                                          .contains(UserModel
-                                          .currentUser.userID) ==
-                                          false &&
-                                          thisGroup.confirmedUsers.contains(
-                                              UserModel
-                                                  .currentUser.userID) ==
-                                              false &&
-                                          thisGroup.admin !=
-                                              UserModel.currentUser.userID) {
-                                        await controller.joinToGroup(thisGroup);
-                                      } else if (thisGroup.unConfirmedUsers
-                                          .contains(UserModel
-                                          .currentUser.userID) ==
-                                          false &&
-                                          thisGroup.confirmedUsers.contains(
-                                              UserModel.currentUser.userID) &&
-                                          thisGroup.admin !=
-                                              UserModel.currentUser.userID) {
-                                        await controller.leaveGroup(thisGroup);
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 16.h,
-                          ),
-                          groupActionButtons(controller, thisGroup),
-                          SizedBox(
-                            height: 16.h,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: CustomText(
-                              text: "About group".tr,
-                              fontColor: Colors.black,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                              textAlignment: Alignment.centerLeft,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          buildGroupAboutSection(),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          Expanded(child: Center(
-                            child: CustomText(
-                              text: "noPosts".tr,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.sp,
-                            ),
-                          ),
-                          )
-                        ],
-                      );
-                    },
-                  );
-                }
-              ),
+                              );
+                      },
+                    );
+                  }),
             )
           ],
         ),
@@ -437,8 +488,7 @@ class GroupView extends StatelessWidget {
       child: Row(
         children: [
           CustomText(
-            text: groupPosts[index].likes.length.toString() +
-                " Likes",
+            text: groupPosts[index].likes.length.toString() + " Likes",
             fontSize: 14,
             fontColor: Colors.grey,
           ),
@@ -447,8 +497,7 @@ class GroupView extends StatelessWidget {
           ),
           CustomText(
             text: (groupPosts[index].comments != null)
-                ? groupPosts[index].comments.length.toString() +
-                    " Comments"
+                ? groupPosts[index].comments.length.toString() + " Comments"
                 : "0 Comments",
             fontSize: 14,
             fontColor: Colors.grey,
@@ -465,7 +514,8 @@ class GroupView extends StatelessWidget {
           onTap: () async {
             if (thisGroup.confirmedUsers
                 .contains(UserModel.currentUser.userID)) {
-              if (groupPosts[index].likes
+              if (groupPosts[index]
+                  .likes
                   .contains(UserModel.currentUser.userID)) {
                 postController.removeLike(groupPosts[index]);
                 await postController.getAllPostsByUserId();
@@ -483,10 +533,10 @@ class GroupView extends StatelessWidget {
           child: Icon(
             Icons.favorite_border_outlined,
             size: 30.w,
-            color: groupPosts[index].likes
-                    .contains(UserModel.currentUser.userID)
-                ? Colors.red
-                : Colors.black,
+            color:
+                groupPosts[index].likes.contains(UserModel.currentUser.userID)
+                    ? Colors.red
+                    : Colors.black,
           ),
         ),
         SizedBox(
@@ -494,24 +544,21 @@ class GroupView extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () async {
-            if(thisGroup.confirmedUsers
-                .contains(UserModel.currentUser.userID))
-              {
-                await postController.getPostCommentsFromFireStore(
-                    groupPosts[index].postId);
-                Get.to(() => CommentView(
-                  thisGroup: thisGroup,
-                  thePost: groupPosts[index],
-                  postId: groupPosts[index].postId,
-                ));
-              }
-            else
-              {
-                Get.defaultDialog(
-                    radius: 12,
-                    title: "Request Not Valid".tr,
-                    middleText: "Please join to the group".tr);
-              }
+            if (thisGroup.confirmedUsers
+                .contains(UserModel.currentUser.userID)) {
+              await postController
+                  .getPostCommentsFromFireStore(groupPosts[index].postId);
+              Get.to(() => CommentView(
+                    thisGroup: thisGroup,
+                    thePost: groupPosts[index],
+                    postId: groupPosts[index].postId,
+                  ));
+            } else {
+              Get.defaultDialog(
+                  radius: 12,
+                  title: "Request Not Valid".tr,
+                  middleText: "Please join to the group".tr);
+            }
           },
           child: Container(
             child: Image(
@@ -529,9 +576,7 @@ class GroupView extends StatelessWidget {
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: 10.h, minWidth: 370.w),
       child: groupPosts[index].postImageURL != null
-          ? Image(
-              image:
-                  NetworkImage(groupPosts[index].postImageURL))
+          ? Image(image: NetworkImage(groupPosts[index].postImageURL))
           : Container(),
     );
   }
@@ -556,8 +601,7 @@ class GroupView extends StatelessWidget {
 
   Widget postUserInfo(
       GroupViewModel controller, PostsViewModel postController, int index) {
-
-    try{
+    try {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -565,9 +609,8 @@ class GroupView extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 16,
-                backgroundImage: NetworkImage(controller
-                    .getUser(groupPosts[index].userId)
-                    .picURL),
+                backgroundImage: NetworkImage(
+                    controller.getUser(groupPosts[index].userId).picURL),
               ),
               SizedBox(
                 width: 8.w,
@@ -580,9 +623,7 @@ class GroupView extends StatelessWidget {
                     fontSize: 14.sp,
                   ),
                   CustomText(
-                    text: controller
-                        .getUser(groupPosts[index].userId)
-                        .userName,
+                    text: controller.getUser(groupPosts[index].userId).userName,
                     fontSize: 14.sp,
                     fontColor: Colors.grey,
                   ),
@@ -599,12 +640,9 @@ class GroupView extends StatelessWidget {
           )
         ],
       );
-    }
-    catch(e)
-    {
+    } catch (e) {
       return CircularProgressIndicator();
     }
-
   }
 
   Padding buildGroupAboutSection() {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:team_at/helper/constant.dart';
 import 'package:team_at/model/group_model.dart';
 import 'package:team_at/model/post_model.dart';
 import 'package:team_at/model/user_model.dart';
@@ -15,6 +16,8 @@ import 'package:team_at/viewModel/posts_view_model.dart';
 import 'package:team_at/view/create_post_view.dart';
 import 'package:team_at/view/comment_view.dart';
 import 'package:team_at/view/edit_group_view.dart';
+import 'package:team_at/view/edit_post.dart';
+
 
 class GroupView extends StatelessWidget {
   final GroupModel thisGroup;
@@ -93,7 +96,7 @@ class GroupView extends StatelessWidget {
                                                       icon: Icon(
                                                         Icons
                                                             .arrow_back_ios_outlined,
-                                                        color: Colors.white,
+                                                        color: kSecondColor,
                                                       ),
                                                       onPressed: () {
                                                         Get.back();
@@ -115,7 +118,7 @@ class GroupView extends StatelessWidget {
                                                               Icons
                                                                   .more_vert_outlined,
                                                               color:
-                                                                  Colors.white,
+                                                                  kSecondColor,
                                                             )
                                                           : Container(),
                                                       onPressed: thisGroup
@@ -230,7 +233,7 @@ class GroupView extends StatelessWidget {
                                         ),
                                         Padding(
                                           padding:
-                                              const EdgeInsets.only(left: 20),
+                                              const EdgeInsets.symmetric(horizontal: 20),
                                           child: CustomText(
                                             text: "About group".tr,
                                             fontColor: Colors.black,
@@ -275,6 +278,7 @@ class GroupView extends StatelessWidget {
                                             child: postUserInfo(controller,
                                                 postController, index - 1),
                                           ),
+                                          SizedBox(height: 10.h,),
                                           postContent(
                                               postController, index - 1),
                                           postImage(postController, index - 1),
@@ -445,7 +449,7 @@ class GroupView extends StatelessWidget {
                                     height: 16.h,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 20),
+                                    padding: EdgeInsets.symmetric(horizontal: 20),
                                     child: CustomText(
                                       text: "About group".tr,
                                       fontColor: Colors.black,
@@ -484,11 +488,11 @@ class GroupView extends StatelessWidget {
 
   Padding postLikesAndCommentsInfo(PostsViewModel postController, int index) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Row(
         children: [
           CustomText(
-            text: groupPosts[index].likes.length.toString() + " Likes",
+            text: groupPosts[index].likes.length.toString() + " Likes".tr,
             fontSize: 14,
             fontColor: Colors.grey,
           ),
@@ -497,8 +501,8 @@ class GroupView extends StatelessWidget {
           ),
           CustomText(
             text: (groupPosts[index].comments != null)
-                ? groupPosts[index].comments.length.toString() + " Comments"
-                : "0 Comments",
+                ? groupPosts[index].comments.length.toString() + " Comments".tr
+                : "0 Comments".tr,
             fontSize: 14,
             fontColor: Colors.grey,
           ),
@@ -530,13 +534,16 @@ class GroupView extends StatelessWidget {
                   middleText: "Please join to the group".tr);
             }
           },
-          child: Icon(
-            Icons.favorite_border_outlined,
-            size: 30.w,
-            color:
-                groupPosts[index].likes.contains(UserModel.currentUser.userID)
-                    ? Colors.red
-                    : Colors.black,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Icon(
+              Icons.favorite_border_outlined,
+              size: 30.w,
+              color:
+                  groupPosts[index].likes.contains(UserModel.currentUser.userID)
+                      ? Colors.red
+                      : Colors.black,
+            ),
           ),
         ),
         SizedBox(
@@ -605,38 +612,71 @@ class GroupView extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 16,
-                backgroundImage: NetworkImage(
-                    controller.getUser(groupPosts[index].userId).picURL),
-              ),
-              SizedBox(
-                width: 8.w,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                    text: thisGroup.groupName,
-                    fontSize: 14.sp,
-                  ),
-                  CustomText(
-                    text: controller.getUser(groupPosts[index].userId).userName,
-                    fontSize: 14.sp,
-                    fontColor: Colors.grey,
-                  ),
-                ],
-              )
-            ],
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.more_vert_outlined,
-              color: Colors.grey,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundImage: NetworkImage(
+                      controller.getUser(groupPosts[index].userId).picURL),
+                ),
+                SizedBox(
+                  width: 8.w,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      text: thisGroup.groupName,
+                      fontSize: 14.sp,
+                    ),
+                    CustomText(
+                      text: controller.getUser(groupPosts[index].userId).userName,
+                      fontSize: 14.sp,
+                      fontColor: Colors.grey,
+                    ),
+                  ],
+                )
+              ],
             ),
-            onPressed: () {},
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                GestureDetector(
+                  child: groupPosts[index].userId == UserModel.currentUser.userID ?Icon(
+                    Icons.edit,
+                    color: Colors.grey,
+                  ) : Container(),
+                  onTap: () {
+                    if(groupPosts[index].userId == UserModel.currentUser.userID)
+                      {
+                        Get.to(EditPostView(thisGroup: thisGroup,thePost: groupPosts[index],));
+                      }
+                  },
+                ),
+                SizedBox(width: 15.w,),
+                GestureDetector(
+                  child:
+                      groupPosts[index].userId == UserModel.currentUser.userID ||
+                              UserModel.currentUser.userID == thisGroup.admin
+                          ? Icon(
+                              Icons.delete_outline,
+                              color: Colors.grey,
+                            )
+                          : Container(),
+                           onTap: () async {
+                          if (groupPosts[index].userId ==
+                                  UserModel.currentUser.userID ||
+                              UserModel.currentUser.userID == thisGroup.admin) {
+                            await postController.deletePost(groupPosts[index].postId);
+                          }
+                        },
+                ),
+              ],
+            ),
           )
         ],
       );
@@ -647,7 +687,7 @@ class GroupView extends StatelessWidget {
 
   Padding buildGroupAboutSection() {
     return Padding(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: CustomText(
         text: thisGroup.groupDescription,
         fontColor: Color(0xff9A9595),
@@ -741,7 +781,7 @@ class GroupView extends StatelessWidget {
                 children: [
                   Image.asset("assets/images/component1.png"),
                   CustomText(
-                    text: "Members",
+                    text: "Members".tr,
                     fontSize: 12.sp,
                     fontColor: Colors.grey.shade500,
                   ),
@@ -825,7 +865,7 @@ class GroupView extends StatelessWidget {
                     width: 5.w,
                   ),
                   CustomText(
-                    text: "Post",
+                    text: "Post".tr,
                     fontSize: 12.sp,
                     fontColor: Colors.grey.shade500,
                   ),

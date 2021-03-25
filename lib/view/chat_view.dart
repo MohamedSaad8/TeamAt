@@ -20,7 +20,7 @@ class ChatView extends StatelessWidget {
                   height: 70.h,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: CustomText(
                     text: "My Groups Chats".tr,
                     fontSize: 18.sp,
@@ -42,7 +42,7 @@ class ChatView extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 20),
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 15),
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Row(
                               children: [
                                 CircleAvatar(

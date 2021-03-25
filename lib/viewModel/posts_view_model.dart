@@ -113,6 +113,24 @@ class PostsViewModel extends GetxController {
     update();
   }
 
+  editPost(PostModel updatePost) async{
+    PostModel newPost = PostModel(
+      groupId: updatePost.groupId,
+      comments: updatePost.comments ,
+      postId:  updatePost.postId,
+      userId: updatePost.userId,
+      likes: updatePost.likes ,
+      postContent: updatePost.postContent,
+      postImageURL: updatePost.postImageURL,
+    );
+  await  FireStorePosts().postCollectionRef.doc(updatePost.postId).update(newPost.toJson());
+  }
+
+  deletePost(String postId)async{
+
+    await FireStorePosts().postCollectionRef.doc(postId).delete();
+  }
+
   getPostImageFromGCamera() async {
     postImage = File(await getImageFromCamera());
     update();

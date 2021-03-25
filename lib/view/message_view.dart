@@ -78,7 +78,7 @@ class MessageView extends StatelessWidget {
                           controller: scrollController,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
                               child: Directionality(
                                 textDirection: groupMessages[index].senderId ==
                                         UserModel.currentUser.userID
@@ -142,20 +142,29 @@ class MessageView extends StatelessWidget {
                     onSaved: (val) {
                       messageContent = val;
                     },
+                    validator: (val){
+                      if(val.isEmpty){
+                        Get.snackbar("error".tr, "enter message".tr);
+                        return "";
+                      }
+                    },
                     decoration: InputDecoration(
                       hintText: "Write a message".tr,
-                      contentPadding: EdgeInsets.only(left: 10, top: 15),
+                      contentPadding: EdgeInsets.only(left: 12, top: 15 , right: 12),
                       suffixIcon: GestureDetector(
                         onTap: () async {
-                          _key.currentState.save();
-                          await postController.addMessageInGroupMessages(
-                              group,
-                              MessageModel(
-                                  senderId: UserModel.currentUser.userID,
-                                  groupId: group.groupID,
-                                  messageId: groupMessages.length,
-                                  messageContent: messageContent));
-                          _controller.clear();
+                          if(_key.currentState.validate())
+                            {
+                              _key.currentState.save();
+                              await postController.addMessageInGroupMessages(
+                                  group,
+                                  MessageModel(
+                                      senderId: UserModel.currentUser.userID,
+                                      groupId: group.groupID,
+                                      messageId: groupMessages.length,
+                                      messageContent: messageContent));
+                              _controller.clear();
+                            }
                         },
                         child: Icon(
                           Icons.send_outlined,

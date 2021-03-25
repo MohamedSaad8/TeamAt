@@ -101,6 +101,11 @@ const Map<String , String> en = {
  "noPosts" : "No Posts to view it",
  "Please select Image" : "Please Enter all Data",
  "Image Error" : "Error in Request" ,
+ "Save Changes" : "Save Changes",
+ "Edit Post" :"Edit Post",
+ "username" : "username" ,
+ "phone" : "phone",
+ "Location" : "Location" ,
 
 
 

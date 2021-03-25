@@ -12,11 +12,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 
 class OTPVerification extends StatefulWidget {
-  String phoneNumber ;
-  String countryCode ;
+  String phoneNumber;
+
+  String countryCode;
 
 
-  OTPVerification({@required this.phoneNumber , this.countryCode});
+  OTPVerification({@required this.phoneNumber, this.countryCode});
 
   @override
   _OTPVerificationState createState() => _OTPVerificationState();
@@ -25,11 +26,13 @@ class OTPVerification extends StatefulWidget {
 
 class _OTPVerificationState extends State<OTPVerification> {
 
-  var verificationCode ;
+  var verificationCode;
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size ;
+    final size = MediaQuery
+        .of(context)
+        .size;
     final _pinPutController = TextEditingController();
     final _pinPutFocusNode = FocusNode();
 
@@ -37,20 +40,19 @@ class _OTPVerificationState extends State<OTPVerification> {
 
       backgroundColor: Colors.white,
       body: GetBuilder<AuthViewModel>(
-        init : AuthViewModel() ,
+        init: AuthViewModel(),
         builder: (controller) {
-
           return Column(
             children: [
               SizedBox(height: 50.h,),
               Container(
                 alignment: Alignment.topLeft,
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios_outlined , color: Colors.black,),
-                  onPressed: (){
-                    controller.phone = widget.countryCode ;
+                  icon: Icon(
+                    Icons.arrow_back_ios_outlined, color: Colors.black,),
+                  onPressed: () {
+                    controller.phone = widget.countryCode;
                     Get.back();
-
                   },
                 ),
               ),
@@ -76,57 +78,62 @@ class _OTPVerificationState extends State<OTPVerification> {
                   ],
                 ),
               ),
-              SizedBox(height : 64.h),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              width: size.width,
-              height: 100.h,
-              child: PinPut(
-                fieldsCount: 6,
-                withCursor: true,
-                textStyle: const TextStyle(fontSize: 25.0, color: Colors.black),
-                eachFieldWidth: 40.0,
-                eachFieldHeight: 55.0,
-                focusNode: _pinPutFocusNode,
-                controller: _pinPutController,
-                submittedFieldDecoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                    color: kMainColor,
+              SizedBox(height: 64.h),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  width: size.width,
+                  height: 100.h,
+                  child: PinPut(
+                    fieldsCount: 6,
+                    withCursor: true,
+                    textStyle: const TextStyle(
+                        fontSize: 25.0, color: Colors.black),
+                    eachFieldWidth: 40.0,
+                    eachFieldHeight: 55.0,
+                    focusNode: _pinPutFocusNode,
+                    controller: _pinPutController,
+                    submittedFieldDecoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(
+                        color: kMainColor,
+                      ),
+                    ),
+                    selectedFieldDecoration: BoxDecoration(
+                      color: kMainColor,
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(
+                        color: kMainColor,
+                      ),
+                    ),
+                    followingFieldDecoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(
+                        color: kMainColor,
+                      ),
+                    ),
+                    pinAnimationType: PinAnimationType.fade,
+                    onSubmit: (pin) async {
+                      await FirebaseAuth.instance.signInWithCredential(
+                          PhoneAuthProvider.credential(
+                            verificationId: verificationCode,
+                            smsCode: await LanguageLocalStorage()
+                                .selectedLanguage == "en" ||  await LanguageLocalStorage()
+                                .selectedLanguage == null ? pin : pin
+                                .split('')
+                                .reversed
+                                .join(''),
+                          )
+                      ).then((value) async {
+                        Get.to(() => CompleteUserInfo());
+                        await FirebaseAuth.instance.signOut();
+                      });
+                    },
                   ),
                 ),
-                selectedFieldDecoration: BoxDecoration(
-                  color: kMainColor,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                    color: kMainColor,
-                  ),
-                ),
-                followingFieldDecoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                    color: kMainColor,
-                  ),
-                ),
-                pinAnimationType: PinAnimationType.fade,
-                onSubmit: (pin) async{
-                  await FirebaseAuth.instance.signInWithCredential(
-                      PhoneAuthProvider.credential(verificationId: verificationCode,
-                          smsCode: await LanguageLocalStorage().selectedLanguage == "en" ? pin : pin.split('').reversed.join(''),
-                      )
-                  ).then((value)  async{
-                    Get.to(() => CompleteUserInfo());
-                    await FirebaseAuth.instance.signOut();
-                  });
-
-
-                },
-              ),
-            ),
-          )
+              )
 
             ],
           );
@@ -136,31 +143,30 @@ class _OTPVerificationState extends State<OTPVerification> {
   }
 
   @override
-  void initState()  {
+  void initState() {
     phoneNumberVerification();
-    super.initState() ;
-
+    super.initState();
   }
 
   Future phoneNumberVerification() async {
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: widget.phoneNumber,
-        verificationCompleted:(auth)  async {
-          Get.to(()=>CompleteUserInfo());
+        verificationCompleted: (auth) async {
+          Get.to(() => CompleteUserInfo());
         },
-        verificationFailed: (FirebaseAuthException e){
-          Get.snackbar("Verification Error ", e.message , duration: Duration(seconds: 10)) ;
+        verificationFailed: (FirebaseAuthException e) {
+          Get.snackbar("Verification Error ", e.message,
+              duration: Duration(seconds: 10));
         },
-        codeSent: (verificationID , recentToken )  {
+        codeSent: (verificationID, recentToken) {
           setState(() {
-            verificationCode = verificationID ;
+            verificationCode = verificationID;
           });
           print("the verificationCode is $verificationCode");
         },
-        codeAutoRetrievalTimeout: (verificationID){
-
+        codeAutoRetrievalTimeout: (verificationID) {
           setState(() {
-            verificationCode = verificationID ;
+            verificationCode = verificationID;
           });
         },
         timeout: Duration(seconds: 120)

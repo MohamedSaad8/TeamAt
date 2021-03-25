@@ -10,16 +10,13 @@ import 'package:team_at/view/group_view.dart';
 import 'package:team_at/viewModel/posts_view_model.dart';
 import 'package:team_at/widget/CustomButton.dart';
 import 'package:team_at/widget/custom_text.dart';
-import 'package:uuid/uuid.dart';
 
-class CreatePostView extends StatelessWidget {
-  final String groupId;
-  final String groupAdminId;
+class EditPostView extends StatelessWidget {
   final GroupModel thisGroup;
+  final PostModel thePost;
 
-  final _controller = TextEditingController();
 
-  CreatePostView({this.groupId, this.groupAdminId, this.thisGroup});
+  EditPostView({this.thisGroup, this.thePost});
 
   GlobalKey<FormState> _key = GlobalKey<FormState>();
 
@@ -54,7 +51,7 @@ class CreatePostView extends StatelessWidget {
                           },
                         ),
                         CustomText(
-                          text: "Create Post".tr,
+                          text: "Edit Post".tr,
                           fontSize: 18.sp,
                           fontColor: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -64,11 +61,11 @@ class CreatePostView extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: CustomButton(
-                        text: "Post".tr,
+                        text: "Save Changes".tr,
                         buttonRadius: 6,
                         buttonWidth: 105.w,
                         buttonHeight: 32.h,
-                        buttonFontSize: 14,
+                        buttonFontSize: 14.sp,
                         onClick: () async {
                           _key.currentState.save();
                           if (controller.postImage == null &&
@@ -80,23 +77,23 @@ class CreatePostView extends StatelessWidget {
                             if (controller.postImage != null) {
                               await controller.uploadImage();
                             }
-                            await controller.createPost(
+                            await controller.editPost(
                                 PostModel(
-                                  groupId: groupId,
-                                  likes: [],
-                                  comments: [],
-                                  postContent: controller.postContent,
-                                  postImageURL: controller.postImageURL,
-                                  userId: UserModel.currentUser.userID,
-                                  postId: Uuid().v4(),
+                                  groupId: thisGroup.groupID,
+                                  likes: thePost.likes,
+                                  comments: thePost.comments,
+                                  postContent:controller.postContent != null ? controller.postContent : thePost.postContent,
+                                  postImageURL: controller.postImageURL!= null ? controller.postImageURL : thePost.postImageURL,
+                                  userId: thePost.userId,
+                                  postId: thePost.postId,
                                 ),
-                                groupId);
+                                );
                             controller.changeIsLoading(false);
-                            _controller.clear();
-                            controller.setImageEqualNull();
+                            Get.back();Get.back();Get.back();Get.back();
                             Get.to(() => GroupView(
                                   thisGroup: thisGroup,
-                                ));
+                                ),
+                            );
                           }
                         },
                       ),
@@ -127,9 +124,10 @@ class CreatePostView extends StatelessWidget {
                             fontColor: Colors.black,
                           ),
                           CustomText(
-                            text: groupAdminId == UserModel.currentUser.userID
-                                ? "admin of group".tr
-                                : "member in group".tr,
+                            text:
+                                thisGroup.admin == UserModel.currentUser.userID
+                                    ? "admin of group".tr
+                                    : "member in group".tr,
                             fontSize: 14.sp,
                             fontColor: Color(0xff9A9595),
                           ),
@@ -154,7 +152,9 @@ class CreatePostView extends StatelessWidget {
                           ),
                           contentPadding: EdgeInsets.symmetric(horizontal: 20),
                         ),
-                        controller: _controller,
+                        initialValue: thePost.postContent.isNotEmpty
+                            ? thePost.postContent
+                            : "",
                         maxLines: null,
                         onSaved: (val) {
                           controller.postContent = val;
@@ -170,9 +170,12 @@ class CreatePostView extends StatelessWidget {
                       ConstrainedBox(
                         constraints:
                             BoxConstraints(minHeight: 370.h, minWidth: 370.w),
-                        child: controller.postImage != null
-                            ? Image(image: FileImage(controller.postImage))
-                            : Container(),
+                        child: controller.postImage == null
+                            ? thePost.postImageURL != null
+                                ? Image(
+                                    image: NetworkImage(thePost.postImageURL))
+                                : Container()
+                            : Image.file(controller.postImage),
                       ),
                     ],
                   ),

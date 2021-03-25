@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,7 +64,11 @@ class AuthViewModel extends GetxController {
     update();
   }
 
- void createAccountWithEmailAndPassword() async {
+  Stream<QuerySnapshot> getUserData(){
+   return FireStoreUser().userCollectionRef.snapshots();
+  }
+
+  void createAccountWithEmailAndPassword() async {
    SharedPreferences preferences = await SharedPreferences.getInstance() ;
     try {
       await _auth
@@ -165,5 +170,22 @@ class AuthViewModel extends GetxController {
     var address = await Geocoder.local.findAddressesFromCoordinates(Coordinates(latitude , longitude));
     country = address.first.countryName;
     update();
+  }
+
+  editProfileData (UserModel updateUser) async {
+    UserModel newUser = UserModel(
+      email: updateUser.email,
+      latitude:  updateUser.latitude,
+      longitude: updateUser.longitude,
+      name: updateUser.name ,
+      phone: updateUser.phone,
+      picURL: updateUser.picURL,
+      userID: updateUser.userID,
+      userName: updateUser.userName,
+      country: updateUser.country,
+    );
+    UserModel.currentUser = newUser ;
+    await FireStoreUser().userCollectionRef.doc(updateUser.userID).update(newUser.toJson());
+
   }
 }

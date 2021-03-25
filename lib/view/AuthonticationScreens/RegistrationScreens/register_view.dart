@@ -123,7 +123,7 @@ class RegisterView extends StatelessWidget {
       child: Column(
         children: [
           CustomText(
-            text: "UserName".tr,
+            text: "username".tr,
             fontColor: Colors.black,
             textAlignment: Alignment.centerLeft,
             fontSize: 16.sp,

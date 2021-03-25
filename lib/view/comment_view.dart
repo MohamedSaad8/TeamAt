@@ -168,12 +168,15 @@ class CommentView extends StatelessWidget {
                     },
                     validator: (val) {
                       if (val.isEmpty)
-                        Get.snackbar(
-                            "Comment Error".tr, "Please Enter Comment".tr);
+                        {
+                          Get.snackbar(
+                              "Comment Error".tr, "Please Enter Comment".tr);
+                          return "";
+                        }
                     },
                     decoration: InputDecoration(
-                      hintText: "Write a comment",
-                      contentPadding: EdgeInsets.only(left: 10, top: 15),
+                      hintText: "Write a comment".tr,
+                      contentPadding: EdgeInsets.only(left: 12, top: 15 , right: 12),
                       suffixIcon: GestureDetector(
                         onTap: () async {
                           if (_key.currentState.validate()) {

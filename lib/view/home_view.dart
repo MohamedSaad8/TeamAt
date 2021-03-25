@@ -128,7 +128,7 @@ class HomeView extends StatelessWidget {
                                 height: 0,
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: Row(
                                   children: [
                                     CircleAvatar(
@@ -198,23 +198,26 @@ class HomeView extends StatelessWidget {
                               ),
                               Row(
                                 children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      if (followingGroupsPosts[index].likes
-                                          .contains(
-                                          UserModel.currentUser.userID))
-                                        postController.removeLike(followingGroupsPosts[index]);
-                                      else
-                                        postController.addLike(followingGroupsPosts[index]);
-                                    },
-                                    child: Icon(
-                                      Icons.favorite_border_outlined,
-                                      size: 30.w,
-                                      color: followingGroupsPosts[index].likes
-                                          .contains(
-                                          UserModel.currentUser.userID)
-                                          ? Colors.red
-                                          : Colors.black,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        if (followingGroupsPosts[index].likes
+                                            .contains(
+                                            UserModel.currentUser.userID))
+                                          postController.removeLike(followingGroupsPosts[index]);
+                                        else
+                                          postController.addLike(followingGroupsPosts[index]);
+                                      },
+                                      child: Icon(
+                                        Icons.favorite_border_outlined,
+                                        size: 30.w,
+                                        color: followingGroupsPosts[index].likes
+                                            .contains(
+                                            UserModel.currentUser.userID)
+                                            ? Colors.red
+                                            : Colors.black,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -251,40 +254,43 @@ class HomeView extends StatelessWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10),
-                                child: Row(
-                                  children: [
-                                    CustomText(
-                                      text: followingGroupsPosts[index]
-                                          .likes
-                                          .length
-                                          .toString() +
-                                          " Likes".tr,
-                                      fontSize: 14,
-                                      fontColor: Colors.grey,
-                                    ),
-                                    SizedBox(
-                                      width: 8.w,
-                                    ),
-                                    CustomText(
-                                      text: (followingGroupsPosts[
-                                      index]
-                                          .comments !=
-                                          null &&
-                                          followingGroupsPosts[
-                                          index]
-                                              .comments
-                                              .length >
-                                              0)
-                                          ? followingGroupsPosts[index]
-                                          .comments
-                                          .length
-                                          .toString() +
-                                          " Comments".tr
-                                          : "0 Comments".tr,
-                                      fontSize: 14,
-                                      fontColor: Colors.grey,
-                                    ),
-                                  ],
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  child: Row(
+                                    children: [
+                                      CustomText(
+                                        text: followingGroupsPosts[index]
+                                            .likes
+                                            .length
+                                            .toString() +
+                                            " Likes".tr,
+                                        fontSize: 14,
+                                        fontColor: Colors.grey,
+                                      ),
+                                      SizedBox(
+                                        width: 8.w,
+                                      ),
+                                      CustomText(
+                                        text: (followingGroupsPosts[
+                                        index]
+                                            .comments !=
+                                            null &&
+                                            followingGroupsPosts[
+                                            index]
+                                                .comments
+                                                .length >
+                                                0)
+                                            ? followingGroupsPosts[index]
+                                            .comments
+                                            .length
+                                            .toString() +
+                                            " Comments".tr
+                                            : "0 Comments".tr,
+                                        fontSize: 14,
+                                        fontColor: Colors.grey,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               )
                             ],

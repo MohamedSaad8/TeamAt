@@ -81,7 +81,7 @@ class GroupView extends StatelessWidget {
                                                   fontSize: 18.sp,
                                                 ),
                                                 top: 180.h,
-                                                bottom: 35.h,
+                                                //bottom: 35.h,
                                                 left: 16.h,
                                               ),
                                               Padding(

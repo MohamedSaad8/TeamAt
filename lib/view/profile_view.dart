@@ -121,7 +121,7 @@ class ProfileView extends StatelessWidget {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 20),
                                             child: Container(
-                                              height: 65.h,
+                                              height: 70.h,
                                               width: size.width,
                                               child: Row(
                                                 mainAxisAlignment:

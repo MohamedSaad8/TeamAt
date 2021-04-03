@@ -224,7 +224,7 @@ class EditProfile extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 5),
+                                      padding: const EdgeInsets.symmetric(horizontal: 5),
                                       child: InkWell(
                                         onTap: () async {
                                           await authController.getUserLocation();
@@ -237,7 +237,7 @@ class EditProfile extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 40.h,
+                                      width: 30.h,
                                     ),
                                     CustomText(
                                       text: authController.longitude == null

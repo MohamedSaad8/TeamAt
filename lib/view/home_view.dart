@@ -307,18 +307,18 @@ class HomeView extends StatelessWidget {
                         SizedBox(
                           height: 8.h,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomText(
-                              text: "Searching For Posts".tr,
-                            ),
-                            SizedBox(
-                              width: 8.w,
-                            ),
-                            CircularProgressIndicator(strokeWidth: 2)
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     CustomText(
+                        //       text: "Searching For Posts".tr,
+                        //     ),
+                        //     SizedBox(
+                        //       width: 8.w,
+                        //     ),
+                        //     CircularProgressIndicator(strokeWidth: 2)
+                        //   ],
+                        // ),
                       ],
                     ),
                   ) ;

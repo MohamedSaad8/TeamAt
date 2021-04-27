@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:team_at/helper/constant.dart';
 import 'package:team_at/view/AuthonticationScreens/RegistrationScreens/add_phone_number.dart';
+import 'package:team_at/view/AuthonticationScreens/RegistrationScreens/complete_info_view.dart';
 import 'package:team_at/viewModel/auth_viewModel.dart';
 import 'package:team_at/widget/CustomButton.dart';
 import 'package:team_at/widget/custom_text.dart';
@@ -65,7 +66,8 @@ class RegisterView extends StatelessWidget {
           if(_key.currentState.validate())
           {
             _key.currentState.save();
-            Get.to(() => AddPhoneNumber());
+           // Get.to(() => AddPhoneNumber());  //For android
+            Get.to(() => CompleteUserInfo()); ///for ios
           }
         },
         buttonRadius: 9.0,

@@ -1,13 +1,28 @@
 # team_at
 
-A new Flutter application.
+Sostial media app made by flutter framework.
+       • Authentication Login/Register with email and password
+       • Register with phone number& phone number verification
+       • App Localization [support AR-EN language] 
+       • get current user location 
+       • create/Edit user profile      • add/update user state
+       • join / leave group              • search about group
+       • create / edit / delete group 
+       • accept / refuse group requests from group admin 
+       • add /edit /delete post in group 
+       • add/remove likes/ comments in posts
+       • Group interactions is Authorization
+       • Find group on google map 
+       • chat feature for every group 
+       • time line page show posts for groups that the user joins it
+
 
 ## Team@ UI
 <a><img src="https://i.im.ge/2022/08/23/Oi7Z0z.161749029-298692368306526-5892655498340994350-n.jpg" alt="161749029_298692368306526_5892655498340994350_n" border="0">
+<a><img src="https://i.im.ge/2022/08/23/Oi78Vy.161712930-472028767253264-5952946058799985779-n.jpg" alt="161712930_472028767253264_5952946058799985779_n" border="0">
 <a><img src="https://i.im.ge/2022/08/23/Oi7fMF.162345603-2771310073131723-811064392635308035-n.jpg" alt="162345603_2771310073131723_811064392635308035_n" border="0">
 <a><img src="https://i.im.ge/2022/08/23/Oi7Kg6.161817474-833360717525683-8765029677669208132-n.jpg" alt="161817474_833360717525683_8765029677669208132_n" border="0">
 <a><img src="https://i.im.ge/2022/08/23/Oi7WrS.161745720-757948558493680-5479373486766480983-n.jpg" alt="161745720_757948558493680_5479373486766480983_n" border="0">
-<a><img src="https://i.im.ge/2022/08/23/Oi78Vy.161712930-472028767253264-5952946058799985779-n.jpg" alt="161712930_472028767253264_5952946058799985779_n" border="0">
 <a><img src="https://i.im.ge/2022/08/23/Oi7kDK.161738408-1135155313617765-897014262740827518-n.jpg" alt="161738408_1135155313617765_897014262740827518_n" border="0">
 <a><img src="https://i.im.ge/2022/08/23/Oi7zE9.161895693-854461048617025-6732255359707001017-n.jpg" alt="161895693_854461048617025_6732255359707001017_n" border="0">
 <a><img src="https://i.im.ge/2022/08/23/Oi7HJX.161745621-473102917067088-5180898276517248601-n.jpg" alt="161745621_473102917067088_5180898276517248601_n" border="0">

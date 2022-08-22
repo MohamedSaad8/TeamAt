@@ -5,7 +5,7 @@ A new Flutter application.
 ## Getting Started
 
 
-<img src="https://drive.google.com/file/d/1AWSX-6GM5hF_3p3dREYOcZlSZ2ZATgz7/view?usp=sharing" alt = "error" />
+<img src="https://drive.google.com/file/d/1AWSX-6GM5hF_3p3dREYOcZlSZ2ZATgz7/view?usp=sharing.jpg"  />
 
 This project is a starting point for a Flutter application.
 

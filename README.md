@@ -1,20 +1,22 @@
 # team_at
 
 Sostial media app made by flutter framework.
-       • Authentication Login/Register with email and password
-       • Register with phone number& phone number verification
-       • App Localization [support AR-EN language] 
-       • get current user location 
-       • create/Edit user profile      • add/update user state
-       • join / leave group              • search about group
-       • create / edit / delete group 
-       • accept / refuse group requests from group admin 
-       • add /edit /delete post in group 
-       • add/remove likes/ comments in posts
-       • Group interactions is Authorization
-       • Find group on google map 
-       • chat feature for every group 
-       • time line page show posts for groups that the user joins it
+       <p>• Authentication Login/Register with email and password</p>
+        <p>• Register with phone number& phone number verification</p>
+       <p> • App Localization [support AR-EN language] </p>
+       <p> • get current user location </p>
+       <p> • create/Edit user profile  </p>    
+       <p> • add/update user state</p>
+        <p>• join / leave group  </p>            
+        <p> • search about group</p>
+       <p> • create / edit / delete group </p>
+      <p>  • accept / refuse group requests from group admin </p>
+       <p> • add /edit /delete post in group </p>
+      <p>  • add/remove likes/ comments in posts</p>
+      <p>  • Group interactions is Authorization</p>
+      <p>  • Find group on google map </p>
+     <p>   • chat feature for every group </p>
+      <p>  • time line page show posts for groups that the user joins it</p>
 
 
 ## Team@ UI

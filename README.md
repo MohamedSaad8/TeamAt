@@ -5,7 +5,7 @@ A new Flutter application.
 ## Getting Started
 
 
-<img src="https://drive.google.com/file/d/1AvtkYq6LY811-fJub359G-qAeQEKqmwW/view?usp=sharing"  />
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Google_logo_%282013-2015%29.svg"  />
 
 This project is a starting point for a Flutter application.
 

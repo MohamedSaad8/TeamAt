@@ -1,6 +1,6 @@
 # team_at
 
-Sostial media app made by flutter framework.
+<h3>Sostial media app made by flutter framework.</h3>
        <p>• Authentication Login/Register with email and password</p>
         <p>• Register with phone number& phone number verification</p>
        <p> • App Localization [support AR-EN language] </p>
@@ -10,13 +10,13 @@ Sostial media app made by flutter framework.
         <p>• join / leave group  </p>            
         <p> • search about group</p>
        <p> • create / edit / delete group </p>
-      <p>  • accept / refuse group requests from group admin </p>
+       <p>  • accept / refuse group requests from group admin </p>
        <p> • add /edit /delete post in group </p>
       <p>  • add/remove likes/ comments in posts</p>
       <p>  • Group interactions is Authorization</p>
       <p>  • Find group on google map </p>
-     <p>   • chat feature for every group </p>
-      <p>  • time line page show posts for groups that the user joins it</p>
+      <p>   • chat feature for every group </p>
+       <p>  • time line page show posts for groups that the user joins it</p>
 
 
 ## Team@ UI
@@ -40,13 +40,4 @@ Sostial media app made by flutter framework.
 <a><img src="https://i.im.ge/2022/08/23/OiDXJP.161783554-2182073368593621-5308434223161415353-n.jpg" alt="161783554_2182073368593621_5308434223161415353_n" border="0">
 <a><img src="https://i.im.ge/2022/08/23/OiDrd1.161767849-302938817830562-1477914836352443100-n.jpg" alt="161767849_302938817830562_1477914836352443100_n" border="0">
 <a><img src="https://i.im.ge/2022/08/23/OiDuNf.161642287-764417051129809-9012755732645215434-n.jpg" alt="161642287_764417051129809_9012755732645215434_n" border="0">
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
